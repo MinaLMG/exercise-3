@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>exercise3_frontend</RootNamespace>
+    <RootNamespace>exercise_3_frontend</RootNamespace>
   </PropertyGroup>
 
 </Project>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "exercise-3 frontend", "exercise-3 frontend\exercise-3 frontend.csproj", "{D788B081-804A-4590-B953-164E2ABD8E9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "exercise-3 frontend", "exercise-3 frontend\exercise-3 frontend.csproj", "{4E95F75D-ADAB-4584-B833-9D5AFDA8B3C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D788B081-804A-4590-B953-164E2ABD8E9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D788B081-804A-4590-B953-164E2ABD8E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D788B081-804A-4590-B953-164E2ABD8E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D788B081-804A-4590-B953-164E2ABD8E9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E95F75D-ADAB-4584-B833-9D5AFDA8B3C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E95F75D-ADAB-4584-B833-9D5AFDA8B3C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E95F75D-ADAB-4584-B833-9D5AFDA8B3C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E95F75D-ADAB-4584-B833-9D5AFDA8B3C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D29363EC-9680-4ECD-8BB0-27BCB743AED9}
+		SolutionGuid = {8C88B662-0D6D-418E-9F8B-36990633DF9D}
 	EndGlobalSection
 EndGlobal
