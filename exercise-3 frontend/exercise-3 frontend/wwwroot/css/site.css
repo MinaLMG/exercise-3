@@ -14,5 +14,26 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  /*margin-bottom: 60px;*/
+}
+.page-background{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+.page-body {
+    flex-grow: 1;
+    background-image: url(../Images/background2.jpg);
+    background-size: 100% auto;
+    background-repeat-y: repeat;
+    position: relative;
+}
+.index-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position:absolute
 }

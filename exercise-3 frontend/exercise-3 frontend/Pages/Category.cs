@@ -3,17 +3,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace exercise_3_frontend.Pages
 {
-    public class PrivacyModel : PageModel
+    public class CategoryModel : PageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
+        private readonly ILogger<IndexModel> _logger;
 
-        public PrivacyModel(ILogger<PrivacyModel> logger)
+        public CategoryModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
         }
 
         public void OnGet()
         {
+
         }
     }
 }
