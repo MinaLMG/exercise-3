@@ -1,10 +1,179 @@
 ﻿@page
 @model CategoryModel
 @{
-    ViewData["Title"] = "Categories";
-    /*IHttpClientFactory client;
-    var catregories= client.*/
+	ViewData["Title"] = "Categories";
+	ViewData["active"] = "Categories";
 }
-<h1>@ViewData["Title"]</h1>
+<div class="page-body categories">
+	<div class="page-body-elements">
+		<h1> Categories</h1>
+		@if (Model.Categories.Count > 0)
+		{
 
+			var index = 0;
+			<table class="table page-table" style="max-width: 90%;">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Name</th>
+						<th scope="col">ID</th>
+						<th scope="col">actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var category in Model.Categories)
+					{
+						index++;
+						<tr>
+							<td>@index</td>
+							<td>@category.Name</td>
+							<td>@category.ID</td>
+							<td class="flex">
+								<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
+								var x="#editModal";
+								x+=category.ID;
+									@x
+								;
+								}>
+									<img class="action" src="~/Images/edit.png"></img>
+								</button>
 
+								<!-- Modal -->
+								<div class="modal fade" id=@{
+							 x="editModal";
+							 x+=category.ID;
+							 	@x
+							 ;
+							 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<form method="post" asp-page="UpdateCategory">
+												@*<form method="post" asp-page="/UpdateCategory/@category.ID">*@
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLabel">Editing a Category</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body edit">
+													<label for="name" class="form-label">Name</label>
+													<input type="text" class="form-control" id="name" name="name" value="@category.Name">
+													<input type="hidden" class="form-control" name="id" value="@category.ID">
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+													<button type="submit" class="btn btn-primary">Save changes</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+								<!-- Button trigger modal -->
+								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target=@{
+								x="#deleteModal";
+								x+=category.ID;
+									@x
+								}>
+									<img class="action" src="~/Images/bin.png"></img>
+								</button>
+
+								<!-- Modal -->
+								<div class="modal fade" id=@{
+							 x="deleteModal";
+							 x+=category.ID;
+							 	@x
+							 ;
+							 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<form method="post" asp-page="DeleteCategory">
+												<input type="hidden" class="form-control" name="id" value="@category.ID">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLabel">deleting a Category</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body">
+													Are you sure you want to delete the category <span class="delete-category">@category.Name</span> ?
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+													<button type="submit" class="btn btn-danger">Yes, Delete</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+
+							</td>
+						</tr>
+					}
+					@*<tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr><tr>
+				<th scope="row">index</th>
+				<td>category.Name</td>
+				<td>category.ID</td>
+				<td></td>
+				</tr>*@
+				</tbody>
+			</table>
+		}
+		else
+		{
+			<h1>No</h1>
+		}
+
+	</div>
+	<div class="page-body-actions">
+		<h4 class="text-center">New Category </h4>
+		<form method="post">
+			<div class="mb-3">
+				<label for="name" class="form-label white">Name</label>
+				<input type="text" class="form-control" id="name" name="name">
+			</div>
+			<button type="submit" class="btn btn-primary">Add Category</button>
+		</form>
+	</div>
+</div>

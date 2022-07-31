@@ -1,33 +1,43 @@
+/**{
+    margin:0;
+    padding:0;
+    box-sizing: border-box; 
+}*/
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /*margin-bottom: 60px;*/
+    /*margin-bottom: 60px;*/
 }
-.page-background{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
+
+.page-background {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
 .page-body {
     flex-grow: 1;
     background-image: url(../Images/background2.jpg);
     background-size: 100% auto;
     background-repeat-y: repeat;
     position: relative;
+    display: flex;
+    justify-content: center;
 }
+
 .index-body {
     display: flex;
     flex-direction: row;
@@ -35,5 +45,151 @@ body {
     align-items: center;
     height: 100%;
     width: 100%;
-    position:absolute
+    position: absolute
+}
+
+.page-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    min-width: 100%;
+    flex-direction: row;
+}
+
+.page-body-elements {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65%;
+    min-height: 100%;
+    flex-direction: column;
+}
+
+    .page-body-elements h1 {
+        color: white;
+        margin: 20px 0;
+    }
+
+    .page-body-elements table {
+        border: 3px solid #AAA;
+        background-color: rgb(128, 128, 128,0.8);
+        font-weight: 600;
+        text-align: center;
+        color: white;
+    }
+
+        .page-body-elements table thead th {
+            border: 1px solid #AAA;
+            border-bottom: 1px solid #AAA !important;
+            color: #ffeb3b;
+        }
+
+        .page-body-elements table tbody td {
+            border: 1px solid #AAA;
+            height: 100%;
+            border-bottom: none;
+        }
+
+            .page-body-elements table tbody td ul {
+                list-style-type: none;
+                margin: 0;
+                margin-block: 0;
+                padding-inline: 0;
+            }
+                /*.page-body-elements table tbody td ul, .page-body-elements table tbody td ol {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height:100%;
+            }*/
+                /*.page-body-elements table tbody td ul.categories {
+            align-items:center;
+            }*/
+                .page-body-elements table tbody td ul .category {
+                    background-color: #e91e63;
+                    border-radius: 9999px;
+                    margin-bottom: 5px;
+                }
+
+            .page-body-elements table tbody td button {
+                margin: 0 5px;
+            }
+
+            .page-body-elements table tbody td .modal-title {
+                color: black;
+            }
+
+            .page-body-elements table tbody td .modal-body {
+                color: #838181;
+            }
+
+                .page-body-elements table tbody td .modal-body.edit {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .page-body-elements table tbody td .modal-body .delete-category {
+                    color: #dc3545;
+                }
+
+img.action {
+    width: 20px;
+    background-color: transparent;
+}
+
+.page-body-elements table tbody td.flex {
+    display: flex;
+    justify-content: space-around;
+}
+
+.page-body-actions {
+    width: 30%;
+    background-color: rgb(128, 128, 128,0.8);
+    border-radius: 5px;
+    box-shadow: white 2px 2px 5px;
+    padding: 10px;
+}
+
+
+    .page-body-actions h4 {
+        color: #ffeb3b /*#920000*/;
+    }
+
+.categories .page-body-actions {
+    margin-top: 50vh;
+    transform: translateY(-50%);
+}
+
+.recipes .page-body-actions {
+    margin-top: 5vh;
+}
+
+    .recipes .page-body-actions .form-floating label {
+        font-size: small;
+        color: #dc3545;
+    }
+
+        .recipes .page-body-actions .form-floating label span {
+            opacity: 0.5;
+        }
+
+    .recipes .page-body-actions .form-floating textarea {
+        font-size: medium;
+    }
+    .recipes .page-body-actions .btn-group {
+        vertical-align:unset;
+        display:flex;
+        max-width:95%;  
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+    .recipes .page-body-actions .btn-group label{
+        margin:3px;
+        flex:0 1 auto;  
+    }
+.white {
+    color: white;
 }

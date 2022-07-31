@@ -21,12 +21,12 @@
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link @if(ViewData["Title"]=="Categories"){
+							<a class="nav-link @if(ViewData["active"]=="Categories"){
 								<text>active</text>
 							}" asp-area="" asp-page="/Categories">Categories</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link @if(ViewData["Title"]=="Recipes"){
+							<a class="nav-link @if(ViewData["active"]=="Recipes"){
 								<text>active</text>
 							}" asp-area="" asp-page="/Recipes">Recipes</a>
 						</li>
@@ -35,9 +35,7 @@
 			</div>
 		</nav>
 	</header>
-	<div class="page-body">
 			@RenderBody()
-	</div>
 
 	<footer class="border-top footer text-muted">
 		<div class="container">

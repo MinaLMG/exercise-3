@@ -62,7 +62,13 @@ public class Data
         this.WriteInFolder(JsonSerializer.Serialize(this.Categories, this.Options), this.CategoriesLoc);
         return toEdit;
     }
-
+    public Category DeleteCategory(Guid id)
+    {
+        Category toDelete = this.Categories.Single(x => x.ID == id);
+        this.Categories.Remove(toDelete);
+        this.WriteInFolder(JsonSerializer.Serialize(this.Categories, this.Options), this.CategoriesLoc);
+        return toDelete;
+    }
     public Recipe EditRecipe(Guid id, Recipe newRecipe)
     {
         Recipe toEdit = this.Recipes.Single(x => x.ID == id);
@@ -97,6 +103,11 @@ public class Pages
         Category toEdit = Data.EditCategory(id, c);
         return Results.Json(toEdit);
     }
+    public IResult DeleteCategory(Guid id)
+    {
+        Category toDelete = Data.DeleteCategory(id);
+        return Results.Json(toDelete);
+    }
 
     public IResult EditRecipe(Guid id, [FromBody] Recipe r)
     {
@@ -116,6 +127,7 @@ public class Pages
         endpoints.MapGet("/categories", () => Results.Json(Data.Categories));
         endpoints.MapPost("/categories", CreateCategory);
         endpoints.MapPut("/categories/{id}", EditCategory);
+        endpoints.MapDelete("/categories/{id}", DeleteCategory);
     }
 
     public void RecipePages(IEndpointRouteBuilder endpoints)
