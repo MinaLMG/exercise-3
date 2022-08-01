@@ -36,7 +36,7 @@
 									@x
 								;
 								}>
-									<img class="action" src="~/Images/edit.png"></img>
+									<img class="action" src="~/Images/edit.png" alt="edit"></img>
 								</button>
 
 								<!-- Modal -->
@@ -51,12 +51,27 @@
 											<form method="post" asp-page="UpdateCategory">
 												@*<form method="post" asp-page="/UpdateCategory/@category.ID">*@
 												<div class="modal-header">
-													<h5 class="modal-title" id="exampleModalLabel">Editing a Category</h5>
+													<h5 class="modal-title" id=@{
+												x="exampleModalLabel";
+												x+=category.ID;
+													@x
+												}>
+														Editing a Category
+													</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<div class="modal-body edit">
-													<label for="name" class="form-label">Name</label>
-													<input type="text" class="form-control" id="name" name="name" value="@category.Name">
+													<label for=@{
+												   x="name";
+												   x+=category.ID;
+												   	@x
+												   }
+												   class="form-label">Name</label>
+													<input type="text" class="form-control" id=@{
+												   x="name";
+												   x+=category.ID;
+												   	@x
+												   } name="name" value="@category.Name">
 													<input type="hidden" class="form-control" name="id" value="@category.ID">
 												</div>
 												<div class="modal-footer">
@@ -73,7 +88,7 @@
 								x+=category.ID;
 									@x
 								}>
-									<img class="action" src="~/Images/bin.png"></img>
+									<img class="action" src="~/Images/bin.png" alt="delete"></img>
 								</button>
 
 								<!-- Modal -->
@@ -88,7 +103,13 @@
 											<form method="post" asp-page="DeleteCategory">
 												<input type="hidden" class="form-control" name="id" value="@category.ID">
 												<div class="modal-header">
-													<h5 class="modal-title" id="exampleModalLabel">Deleting a Category</h5>
+													<h5 class="modal-title" id=@{
+												x="exampleModalLabel";
+												x+=category.ID;
+													@x
+												}>
+														Deleting a Category
+													</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<div class="modal-body">
