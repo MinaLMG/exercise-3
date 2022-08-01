@@ -79,7 +79,13 @@ public class Data
         this.WriteInFolder(JsonSerializer.Serialize(this.Recipes, this.Options), this.RecipesLoc);
         return toEdit;
     }
-
+    public Recipe DeleteRecipe(Guid id)
+    {
+        Recipe toDelete = this.Recipes.Single(x => x.ID == id);
+        this.Recipes.Remove(toDelete);
+        this.WriteInFolder(JsonSerializer.Serialize(this.Recipes, this.Options), this.RecipesLoc);
+        return toDelete;
+    }
     public void AddRecipe(Recipe to_add)
     {
         this.Recipes.Add(to_add);
@@ -109,19 +115,23 @@ public class Pages
         return Results.Json(toDelete);
     }
 
-    public IResult EditRecipe(Guid id, [FromBody] Recipe r)
-    {
-        Console.WriteLine("here");
-        Recipe toEdit = Data.EditRecipe(id, r);
-        return Results.Json(toEdit);
-    }
-
     public IResult CreateRecipe([FromBody] Recipe r)
     {
         Data.AddRecipe(r);
         return Results.Json(new { r.Title, r.Ingredients, r.Instructions, r.Categories, r.ID });
     }
 
+    public IResult EditRecipe(Guid id, [FromBody] Recipe r)
+    {
+        Console.WriteLine("here");
+        Recipe toEdit = Data.EditRecipe(id, r);
+        return Results.Json(toEdit);
+    }
+    public IResult DeleteRecipe(Guid id)
+    {
+        Recipe toDelete = Data.DeleteRecipe(id);
+        return Results.Json(toDelete);
+    }
     public void CategoryPages(IEndpointRouteBuilder endpoints)
     {
         endpoints.MapGet("/categories", () => Results.Json(Data.Categories));
@@ -135,6 +145,8 @@ public class Pages
         endpoints.MapGet("/recipes", () => Results.Json(Data.Recipes));
         endpoints.MapPost("/recipes", CreateRecipe);
         endpoints.MapPut("/recipes/{id}", EditRecipe);
+        endpoints.MapDelete("/recipes/{id}", DeleteRecipe);
+
     }
 
     public Pages(Data data) { this.Data = data; }

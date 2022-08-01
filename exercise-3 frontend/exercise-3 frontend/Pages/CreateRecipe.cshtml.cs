@@ -19,8 +19,14 @@ namespace exercise_3_frontend.Pages
         public HttpClient HttpClient = new();
         public async Task<IActionResult> OnPost()
         {
-            Recipe toAdd = new Recipe();
+            Recipe toAdd = new Recipe("",new(),new(),new());
+            
             toAdd.Title = Title;
+            foreach (Guid category in Categories)
+            {
+                toAdd.Categories.Add(category);
+            }
+
             toAdd.Instructions = new();
             // using the method
             String[] strlist = Instructions.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);

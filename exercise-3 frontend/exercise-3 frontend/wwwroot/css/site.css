@@ -125,15 +125,48 @@ body {
                 color: #838181;
             }
 
-                .page-body-elements table tbody td .modal-body.edit {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
+            .page-body-elements table tbody td .modal-dialog {
+                margin-top: 50vh;
+                transform: translateY(-50%) !important;
+            }
 
-                .page-body-elements table tbody td .modal-body .delete-category {
-                    color: #dc3545;
-                }
+            .page-body-elements table tbody td .modal-body.edit {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .page-body-elements table tbody td .modal-body .delete-category {
+                color: #dc3545;
+            }
+
+.recipes .page-body-elements table tbody td .modal-body .form-floating {
+    width: 100%;
+}
+
+    .recipes .page-body-elements table tbody td .modal-body .form-floating label {
+        font-size: small;
+        /*color: #dc3545;*/
+    }
+
+        .recipes .page-body-elements table tbody td .modal-body .form-floating label span {
+            opacity: 0.5;
+        }
+
+    .recipes .page-body-elements table tbody td .modal-body .form-floating textarea {
+        font-size: medium;
+    }
+    .recipes .page-body-elements table tbody td .modal-body .btn-group {
+        vertical-align: unset;
+        display: flex;
+        width: 95%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+        .recipes .page-body-elements table tbody td .modal-body .btn-group label {
+            margin: 3px;
+            flex: 0 1 auto;
+        }
 
 img.action {
     width: 20px;
@@ -179,17 +212,34 @@ img.action {
     .recipes .page-body-actions .form-floating textarea {
         font-size: medium;
     }
+
     .recipes .page-body-actions .btn-group {
-        vertical-align:unset;
-        display:flex;
-        max-width:95%;  
-        flex-wrap:wrap;
-        justify-content:center;
+        vertical-align: unset;
+        display: flex;
+        max-width: 95%;
+        flex-wrap: wrap;
+        justify-content: center;
     }
-    .recipes .page-body-actions .btn-group label{
-        margin:3px;
-        flex:0 1 auto;  
-    }
+
+        .recipes .page-body-actions .btn-group label {
+            margin: 3px;
+            flex: 0 1 auto;
+        }
+/*.recipes .page-body-actions .btn-group .btn-outline-custom {
+            color: #e91e63;
+            border-color: #e91e63;
+            font-weight:600
+        }
+btn-check:active + .btn-outline-custom {
+    color: #fff;
+    background-color: #e91e63;
+    border-color: #e91e63;
+}
+.btn-outline-custom:hover {
+    color: #fff;
+    background-color: #e91e63;
+    border-color: #e91e63;
+}*/
 .white {
     color: white;
 }

@@ -75,15 +75,75 @@
 									<div class="modal-dialog">
 										<div class="modal-content">
 											<form method="post" asp-page="UpdateCategory">
-												@*<form method="post" asp-page="/UpdateCategory/@category.ID">*@
 												<div class="modal-header">
-													<h5 class="modal-title" id="exampleModalLabel">Editing a Category</h5>
+													<h5 class="modal-title" id="exampleModalLabel">Editing a Recipe</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<div class="modal-body edit">
-													<label for="name" class="form-label">Name</label>
-													<input type="text" class="form-control" id="name" name="name" value="@recipe.Title">
+													<label for="name" class="form-label ">Title</label>
+													<input type="text" class="form-control mb-3" id="name" name="title" value="@recipe.Title">
 													<input type="hidden" class="form-control" name="id" value="@recipe.ID">
+													@*<div class="form-floating mb-3">
+											<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="ingredients" value="@recipe.Ingredients"></textarea>>
+											<label for="floatingTextarea2">ingredients<span class="weak">(separated by new lines)</span></label>
+											</div>*@
+													<div class="form-floating mb-3">
+														<textarea class="form-control mb-3" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="ingredients">
+															@{
+																@foreach (var ingredient in recipe.Ingredients)
+																{
+																	x = ingredient + "\r\n";
+																	@x
+																	;
+																}
+															}
+																								</textarea>
+														<label for="floatingTextarea2">ingredients<span class="weak">(separated by new lines)</span></label>
+													</div>
+													<div class="form-floating mb-3">
+														<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="instructions">
+															@{
+																@foreach (var instruction in recipe.Instructions)
+																{
+																	x = instruction + "\r\n";
+																	@x
+																	;
+																}
+															}
+																										</textarea>
+														<label for="floatingTextarea2">instructions<span class="weak">(separated by new lines)</span></label>
+													</div>
+													<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
+														@foreach (var category in Model.Categories)
+														{
+															x = "";
+															<input name="categories"
+													   type="checkbox" class="btn-check" id=@{
+													   x = "btncheck1";
+													   x+=category.ID;
+													   	@x
+													   }
+													   value=@category.ID
+													   autocomplete="off" @*checked=@{
+													   	@if(recipe.Categories.Any(c=> c== category.ID))
+													   {
+													   x="true";
+													   }
+													   else
+													   {
+													   x="false";
+													   }
+													   	@x
+													   }*@ />
+															<label class="btn btn-outline-danger" for=@{
+													   x="btncheck1";
+													   x+=category.ID;
+													   	@x
+													   }>
+																@category.Name
+															</label>
+														}
+													</div>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -111,14 +171,14 @@
 							 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
 										<div class="modal-content">
-											<form method="post" asp-page="DeleteCategory">
+											<form method="post" asp-page="DeleteRecipe">
 												<input type="hidden" class="form-control" name="id" value="@recipe.ID">
 												<div class="modal-header">
-													<h5 class="modal-title" id="exampleModalLabel">deleting a Category</h5>
+													<h5 class="modal-title" id="exampleModalLabel">Deleting a Recipe</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<div class="modal-body">
-													Are you sure you want to delete the category <span class="delete-category">@recipe.Title</span> ?
+													Are you sure you want to delete the recipe <span class="delete-category">@recipe.Title</span> ?
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -146,7 +206,7 @@
 		<h4 class="text-center">New Recipe </h4>
 		<form method="post" asp-page="CreateRecipe">
 			<div class="mb-3">
-				<label for="name" class="form-label white">Tiltle</label>
+				<label for="name" class="form-label white">Title</label>
 				<input type="text" class="form-control" id="name" name="title">
 			</div>
 			<div class="form-floating mb-3">
@@ -157,24 +217,28 @@
 				<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="instructions"></textarea>
 				<label for="floatingTextarea2">instructions<span class="weak">(separated by new lines)</span></label>
 			</div>
-			<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
-				@foreach (var category in Model.Categories)
-				{
-					var x="";
-					<input name="categories"
-					   type="checkbox" class="btn-check" id=@{
-					   x = "btncheck1";
-					   x+=category.ID;
-					   	@x
-					   }
-					   value=@category.ID
-					   autocomplete="off">
-					<label class="btn btn-outline-primary" for=@{
-					   x="btncheck1";
-					   x+=category.ID;
-					   	@x
-					   }>@category.Name</label>
-				}
+			<div class="mb-3">
+				<label class="form-label white">Categories</label>
+
+				<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
+					@foreach (var category in Model.Categories)
+					{
+						var x = "";
+						<input name="categories"
+						   type="checkbox" class="btn-check" id=@{
+						   x = "btncheck1";
+						   x+=category.ID;
+						   	@x
+						   }
+						   value=@category.ID
+						   autocomplete="off">
+						<label class="btn btn-outline-primary" for=@{
+						   x="btncheck1";
+						   x+=category.ID;
+						   	@x
+						   }>@category.Name</label>
+					}
+				</div>
 			</div>
 			<button type="submit" class="btn btn-primary">Add Recipe</button>
 		</form>
