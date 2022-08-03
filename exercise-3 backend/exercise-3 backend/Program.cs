@@ -66,7 +66,18 @@ public class Data
     {
         Category toDelete = this.Categories.Single(x => x.ID == id);
         this.Categories.Remove(toDelete);
+        foreach (Recipe recipe in this.Recipes)
+        {
+            try
+            {
+                Guid toDelete2 = recipe.Categories.Single(x => x == id);
+                recipe.Categories.Remove(toDelete2);
+            }catch(Exception e){ 
+
+            }
+        }
         this.WriteInFolder(JsonSerializer.Serialize(this.Categories, this.Options), this.CategoriesLoc);
+        this.WriteInFolder(JsonSerializer.Serialize(this.Recipes, this.Options), this.RecipesLoc);
         return toDelete;
     }
     public Recipe EditRecipe(Guid id, Recipe newRecipe)
@@ -112,6 +123,7 @@ public class Pages
     public IResult DeleteCategory(Guid id)
     {
         Category toDelete = Data.DeleteCategory(id);
+
         return Results.Json(toDelete);
     }
 

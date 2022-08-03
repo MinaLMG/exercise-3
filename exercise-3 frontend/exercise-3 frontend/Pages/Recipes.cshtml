@@ -4,315 +4,360 @@
 @{
 	ViewData["Title"] = "Recipes";
 	ViewData["active"] = "Recipes";
+	var x = "";
 }
-<div class="page-body recipes">
-	<div class="page-body-elements">
-		<h1> Recipes </h1>
-		@if (Model.Recipes.Count > 0)
-		{
+<div class="modals">
+	<!-- Adding Modal -->
+	<div class="modal fade" id=@{
+		 x="addModal";
+		 	@x
+		 ;
+		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form method="post" asp-page="CreateRecipe">
+					<div class="modal-header">
+						<h5 class="modal-title">Adding a new Recipe</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body ">
+						<label for=@{
+							   x="name";
+							   	@x
+							   ;
+							   } class="form-label ">Title</label>
+						<input type="text" class="form-control mb-3" id=@{
+							   x="name";
+							   	@x
+							   } name="title">
+						<input type="hidden" class="form-control" name="id">
+						<div class="form-floating mb-3">
+							<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@{
+									  x="floatingTextarea";
+									  	@x
+									  ;
+									  } style="height: 100px" name="ingredients">
 
-			var index = 0;
-			<table class="table page-table" style="max-width: 90%;">
-				<thead>
-					<tr>
-						@*<th scope="col">#</th>*@
-						<th scope="col">Name</th>
-						<th scope="col">ingredients</th>
-						<th scope="col"style="width: 35%;">instructions</th>
-						<th scope="col">categories</th>
-						<th scope="col">actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var recipe in Model.Recipes)
-					{
-						index++;
-						<tr>
-							@*<td>@index</td>*@
-							<td>@recipe.Title</td>
-							<td>
-								<ul>
+																												</textarea>
+							<label for=@{
+								   x="floatingTextarea";
+								   	@x
+								   ;
+								   }>ingredients<span class="weaker">(separated by new lines)</span></label>
+						</div>
+						<div class="form-floating mb-3">
+							<textarea class="form-control" placeholder="Leave a comment here" id=@{
+									  x="floatingTextarea2";
+									  	@x
+									  ;
+									  } style="height: 100px" name="instructions">
+																											</textarea>
+							<label for=@{
+								   x="floatingTextarea2";
+								   	@x
+								   ;
+								   }>instructions<span class="weaker">(separated by new lines)</span></label>
+						</div>
+						<div class="form-floating mb-3">
+							<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
+								@foreach (var category in Model.Categories)
+								{
+									x = "";
+									<input name="categories"
+									   type="checkbox" class="btn-check" id=@{
+									   x = "btncheckedit";
+									   x+=category.ID;
+									   	@x
+									   ;
+									   }
+									   value=@category.ID
+									   autocomplete="off">
+									<label class="btn btn-outline-danger"
+									   for=@{
+									   x="btncheckedit";
+									   x+=category.ID;
+									   	@x
+									   ;
+									   }>
+										@category.Name
+									</label>
+								}
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Add</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	@if (Model.Recipes.Count > 0)
+	{
+		@foreach (var recipe in Model.Recipes)
+		{
+			;
+			<!--showing Modal -->
+			<div class="modal fade" id=@{
+		 x="showModal";
+		 x+=recipe.ID;
+		 	@x
+		 ;
+		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<form method="post" asp-page="UpdateRecipe">
+							<div class="modal-header">
+								<h5 class="modal-title">@recipe.Title</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body show">
+								<div class="label">
+									ingredients
+								</div>
+								<div class="ingredients mb-3">
 									@foreach (var ingredient in recipe.Ingredients)
 									{
-										<li><div>@ingredient</div></li>
+										<div>@ingredient</div>
 									}
-								</ul>
-							</td>
-							<td>
-								<ol>
-									@foreach (var instruction in recipe.Instructions)
-									{
-										<li> <div>@instruction</div></li>
-									}
-								</ol>
-							</td>
-							<td>
-								<ul class="categories">
+								</div>
+								<div class="label">
+									instructions
+								</div>
+								<div class="instructions mb-3">
+									<ol>
+										@foreach (var instruction in recipe.Instructions)
+										{
+											<li> <div>@instruction</div></li>
+										}
+									</ol>
+								</div>
+								<div class="label">
+									categories
+								</div>
+								<div class="categories mb-3">
 									@foreach (var category in recipe.Categories)
 									{
-										<li class="category">@Model.categoriesNamesMap[category]</li>
+										<div class="category">@Model.categoriesNamesMap[category]</div>
 									}
-								</ul>
-							</td>
-							<td class="flex">
-								<!-- Button trigger modal -->
-								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
-								var x="#editModal";
-								x+=recipe.ID;
-									@x
-								; 
-								}>
-									<img class="action" src="~/Images/edit.png" alt="edit"></img>
-								</button>
-
-								<!-- Modal -->
-								<div class="modal fade" id=@{
-							 x="editModal";
-							 x+=recipe.ID;
-							 	@x
-							 ;
-							 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<form method="post" asp-page="UpdateRecipe">
-												<div class="modal-header">
-													<h5 class="modal-title">Editing a Recipe</h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-												</div>
-												<div class="modal-body edit">
-													<label for=@{
-												   x="name";
-												   x+=recipe.ID;
-												   	@x
-												   ;
-												   } class="form-label ">Title</label>
-													<input type="text" class="form-control mb-3" id=@{
-												   x="name";
-												   x+=recipe.ID;
-												   	@x
-												   ;
-												   } name="title" value="@recipe.Title">
-													<input type="hidden" class="form-control" name="id" value="@recipe.ID">
-													<div class="form-floating mb-3">
-														<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@{
-														  x="floatingTextarea";
-														  x+=recipe.ID;
-														  	@x
-														  ;
-														  } style="height: 100px" name="ingredients">
-															@{
-																var index2 = 0;
-																@foreach (var ingredient in recipe.Ingredients)
-																{
-																	x = index2 > 0 ? "\r\n" : "";
-																	x += ingredient; 
-																	@x
-																	index2++;
-																}
-															}
-																																										</textarea>
-														<label for=@{
-													   x="floatingTextarea";
-													   x+=recipe.ID;
-													   	@x
-													   ;
-													   }>ingredients<span class="weaker">(separated by new lines)</span></label>
-													</div>
-													<div class="form-floating mb-3">
-														<textarea class="form-control" placeholder="Leave a comment here" id=@{
-													   x="floatingTextarea2";
-													   x+=recipe.ID;
-													   	@x
-													   ;
-													   } style="height: 100px" name="instructions">
-															@{
-																index2 = 0;
-																@foreach (var instruction in recipe.Instructions)
-																{
-																	x = index2 > 0 ? "\r\n" : "";
-																	x += instruction; 
-																	@x
-																	index2++;
-																}
-															}
-																																												</textarea>
-														<label for=@{
-													   x="floatingTextarea2";
-													   x+=recipe.ID;
-													   	@x
-													   ;
-													   }>instructions<span class="weaker">(separated by new lines)</span></label>
-													</div>
-													@*<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
-											@foreach (var category in Model.Categories)
-											{
-											x = "";
-											<input name="categories"
-											type="checkbox" class="btn-check" id=@{
-											x = "btncheck1";
-											x+=category.ID;
-											@x
-											}
-											value=@category.ID
-											autocomplete="off" @*checked=@{
-											@if(recipe.Categories.Any(c=> c== category.ID))
-											{
-											x="true";
-											}
-											else
-											{
-											x="false";
-											}
-											@x
-											}/>
-											<label class="btn btn-outline-danger" for=@{
-											x="btncheck1";
-											x+=category.ID;
-											@x
-											}>
-											@category.Name
-											</label>
-											}
-											</div>*@
-													<div class="form-floating mb-3">
-														<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
-															@foreach (var category in Model.Categories)
-															{
-																x = "";
-																<input name="categories"
-														   type="checkbox" class="btn-check" id=@{
-														   x = "btncheckedit";
-														   x+=recipe.ID;
-														   x+=category.ID;
-														   	@x
-														   ;
-														   }
-														   value=@category.ID
-														   autocomplete="off"
-														   @{
-														   	@if(recipe.Categories.Any(c=> c== category.ID))
-														   {
-														   x="checked";
-														   }
-														   else
-														   {
-														   x="";
-														   }
-														   	@x
-														   ;
-														   }>
-																<label class="btn btn-outline-danger"
-														   for=@{
-														   x="btncheckedit";
-														   x+=recipe.ID;
-														   x+=category.ID;
-														   	@x
-														   ;
-														   }>
-																	@category.Name
-																</label>
-															}
-														</div>
-													</div>
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-													<button type="submit" class="btn btn-primary">Save changes</button>
-												</div>
-											</form>
-										</div>
-									</div>
 								</div>
-								<!-- Button trigger modal -->
-								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target=@{
-								x="#deleteModal";
-								x+=recipe.ID;
-									@x
-								;
-								}>
-									<img class="action" src="~/Images/bin.png" alt="del"></img>
-								</button>
-
-								<!-- Modal -->
-								<div class="modal fade" id=@{
-							 x="deleteModal";
-							 x+=recipe.ID;
-							 	@x;
-							 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<form method="post" asp-page="DeleteRecipe">
-												<input type="hidden" class="form-control" name="id" value="@recipe.ID">
-												<div class="modal-header">
-													<h5 class="modal-title">Deleting a Recipe</h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-												</div>
-												<div class="modal-body">
-													Are you sure you want to delete the recipe <span class="delete-category">@recipe.Title</span> ?
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-													<button type="submit" class="btn btn-danger">Yes, Delete</button>
-												</div>
-											</form>
-										</div>
-									</div>
-								</div>
-
-							</td>
-						</tr>
-					}
-				</tbody>
-			</table>
-		}
-		else
-		{
-			<h1>No</h1>
-		}
-
-	</div>
-	<div class="page-body-actions">
-
-		<h4 class="text-center">New Recipe </h4>
-		<form method="post" asp-page="CreateRecipe">
-			<div class="mb-3">
-				<label for="name1" class="form-label white">Title</label>
-				<input type="text" class="form-control" id="name1" name="title">
-			</div>
-			<div class="form-floating mb-3">
-				<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea1" style="height: 100px" name="ingredients"></textarea>
-				<label for="floatingTextarea1">ingredients<span class="weaker">(separated by new lines)</span></label>
-			</div>
-			<div class="form-floating mb-3">
-				<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="instructions"></textarea>
-				<label for="floatingTextarea2">instructions<span class="weaker">(separated by new lines)</span></label>
-			</div>
-			<div class="mb-3">
-				<label class="form-label white">Categories</label>
-				<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
-					@foreach (var category in Model.Categories)
-					{
-						var x = "";
-						<input name="categories"
-						   type="checkbox" class="btn-check" id=@{
-						   x = "btncheck";
-						   x+=category.ID;
-						   	@x
-						   }
-						   value=@category.ID
-						   autocomplete="off">
-						<label class="btn btn-outline-warning"
-						   for=@{
-						   x="btncheck";
-						   x+=category.ID;
-						   	@x
-						   }>
-							@category.Name
-						</label>
-					}
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-primary">Add Recipe</button>
-		</form>
+			<!-- Editing Modal -->
+			<div class="modal fade" id=@{
+		 x="editModal";
+		 x+=recipe.ID;
+		 	@x
+		 ;
+		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<form method="post" asp-page="UpdateRecipe">
+							<div class="modal-header">
+								<h5 class="modal-title">Editing a Recipe</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body edit">
+								<label for=@{
+							   x="name";
+							   x+=recipe.ID;
+							   	@x
+							   ;
+							   } class="form-label ">Title</label>
+								<input type="text" class="form-control mb-3" id=@{
+							   x="name";
+							   x+=recipe.ID;
+							   	@x
+							   ;
+							   } name="title" value="@recipe.Title">
+								<input type="hidden" class="form-control" name="id" value="@recipe.ID">
+								<div class="form-floating mb-3">
+									<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@{
+									  x="floatingTextarea";
+									  x+=recipe.ID;
+									  	@x
+									  ;
+									  } style="height: 100px" name="ingredients">
+										@{
+											var index2 = 0;
+											@foreach (var ingredient in recipe.Ingredients)
+											{
+												x = index2 > 0 ? "\r\n" : "";
+												x += ingredient;
+												@x
+												index2++;
+											}
+										}
+																																</textarea>
+									<label for=@{
+								   x="floatingTextarea";
+								   x+=recipe.ID;
+								   	@x
+								   ;
+								   }>ingredients<span class="weaker">(separated by new lines)</span></label>
+								</div>
+								<div class="form-floating mb-3">
+									<textarea class="form-control" placeholder="Leave a comment here" id=@{
+									  x="floatingTextarea2";
+									  x+=recipe.ID;
+									  	@x
+									  ;
+									  } style="height: 100px" name="instructions">
+										@{
+											index2 = 0;
+											@foreach (var instruction in recipe.Instructions)
+											{
+												x = index2 > 0 ? "\r\n" : "";
+												x += instruction;
+												@x
+												index2++;
+											}
+										}
+																																</textarea>
+									<label for=@{
+								   x="floatingTextarea2";
+								   x+=recipe.ID;
+								   	@x
+								   ;
+								   }>instructions<span class="weaker">(separated by new lines)</span></label>
+								</div>
+								<div class="form-floating mb-3">
+									<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
+										@foreach (var category in Model.Categories)
+										{
+											x = "";
+											<input name="categories"
+									   type="checkbox" class="btn-check" id=@{
+									   x = "btncheckedit";
+									   x+=recipe.ID;
+									   x+=category.ID;
+									   	@x
+									   ;
+									   }
+									   value=@category.ID
+									   autocomplete="off"
+									   @{
+									   	@if(recipe.Categories.Any(c=> c== category.ID))
+									   {
+									   x="checked";
+									   }
+									   else
+									   {
+									   x="";
+									   }
+									   	@x
+									   }>
+											<label class="btn btn-outline-danger"
+									   for=@{
+									   x="btncheckedit";
+									   x+=recipe.ID;
+									   x+=category.ID;
+									   	@x
+									   }>
+												@category.Name
+											</label>
+										}
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary">Save changes</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!--Delete Modal -->
+			<div class="modal fade" id=@{
+		 x="deleteModal";
+		 x+=recipe.ID;
+		 	@x
+		 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<form method="post" asp-page="DeleteRecipe">
+							<input type="hidden" class="form-control" name="id" value="@recipe.ID">
+							<div class="modal-header">
+								<h5 class="modal-title">Deleting a Recipe</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								Are you sure you want to delete the recipe <span class="delete-category">@recipe.Title</span> ?
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-danger">Yes, Delete</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+		}
+	}
+</div>
+<div class="page-body recipes">
+	<div class="page-body-elements">
+		<div class="recipes-header-container">
+			<h1> Recipes </h1>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
+					x="#addModal";
+						@x
+					;
+					}>
+				<img class="action" src="~/Images/add.png" alt="add" />
+
+			</button>
+
+		</div>
+		<div class="recipe-cards">
+			@if (Model.Recipes.Count > 0)
+			{
+				@foreach (var recipe in Model.Recipes)
+				{
+					<div class="recipe-card">
+
+						<div class="title">
+							@recipe.Title
+						</div>
+						<div class="buttons">
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target=@{
+							x="#showModal";
+							x+=recipe.ID;
+								@x
+							}>
+								<img class="action" src="~/Images/view.png" alt="view" />
+							</button>
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
+							x="#editModal";
+							x+=recipe.ID;
+								@x
+							}>
+								<img class="action" src="~/Images/edit.png" alt="edit" />
+							</button>
+
+
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target=@{
+							x="#deleteModal";
+							x+=recipe.ID;
+								@x
+							}>
+								<img class="action" src="~/Images/bin.png" alt="del" />
+							</button>
+						</div>
+					</div>
+				}
+			}
+		</div>
 	</div>
 </div>
