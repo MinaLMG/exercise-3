@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>E:\Course\asp.net\C#\exercise-3\exercise-3 backend\exercise-3 backend\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2022-08-08T16:02:38.9035094Z;True|2022-08-08T05:42:01.6371486+02:00;False|2022-08-08T05:41:48.2030649+02:00;False|2022-08-08T05:40:32.3588863+02:00;True|2022-08-08T05:34:04.6010034+02:00;True|2022-08-08T05:29:49.0695767+02:00;True|2022-08-08T05:12:43.2836376+02:00;</History>
+  </PropertyGroup>
+</Project>

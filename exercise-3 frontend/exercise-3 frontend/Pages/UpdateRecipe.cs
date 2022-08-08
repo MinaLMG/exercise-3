@@ -23,7 +23,7 @@ namespace exercise_3_frontend.Pages
         {
             Recipe toEdit = new Recipe("", new(), new(), new());
             toEdit.ID = ID;
-            toEdit.Title = Title;
+            toEdit.Title = Title.Trim();
             foreach (Guid category in Categories)
             {
                 toEdit.Categories.Add(category);
@@ -35,20 +35,21 @@ namespace exercise_3_frontend.Pages
             String[] strlist = Instructions.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             foreach (String s in strlist)
             {
-                toEdit.Instructions.Add(s);
+                if (s.Trim() != "")
+                    toEdit.Instructions.Add(s.Trim());
             }
             Ingredients = Ingredients.Trim();
             strlist = Ingredients.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             foreach (String s in strlist)
             {
-                toEdit.Ingredients.Add(s);
+                if (s.Trim() != "")
+                    toEdit.Ingredients.Add(s.Trim());
             }
 
 
             var temp = JsonSerializer.Serialize(toEdit);
             var res = await HttpClient.PutAsync("https://localhost:7295/recipes/" + ID, new StringContent(temp, Encoding.UTF8, "application/json"));
-            return Redirect("/Recipes");
-
+            return Redirect("/Recipes?c=9");
         }
 
     }

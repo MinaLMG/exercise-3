@@ -25,7 +25,6 @@ namespace exercise_3_frontend.Pages
         }
         public async Task ListCategories()
         {
-
             var res = await HttpClient.GetAsync("https://localhost:7295/categories");
             var serializeOptions = new JsonSerializerOptions
             {

@@ -12,8 +12,17 @@ namespace exercise_3_frontend.Pages
         public List<Category> Categories = new();
         public Dictionary<Guid, string> categoriesNamesMap = new Dictionary<Guid, string>();
 
-        //[BindProperty]
-        //public string Name { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Title { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Ingredients { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Instructions { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Message { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Open { get; set; }
+
         private readonly ILogger<IndexModel> _logger;
 
         public RecipeModel(ILogger<IndexModel> logger)
@@ -27,7 +36,6 @@ namespace exercise_3_frontend.Pages
         }
         public async Task ListCategories()
         {
-
             var res = await HttpClient.GetAsync("https://localhost:7295/recipes");
             var serializeOptions = new JsonSerializerOptions
             {

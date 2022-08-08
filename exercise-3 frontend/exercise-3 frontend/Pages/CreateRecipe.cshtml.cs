@@ -21,7 +21,7 @@ namespace exercise_3_frontend.Pages
         {
             Recipe toAdd = new Recipe("",new(),new(),new());
             
-            toAdd.Title = Title;
+            toAdd.Title = Title.Trim();
             foreach (Guid category in Categories)
             {
                 toAdd.Categories.Add(category);
@@ -32,12 +32,16 @@ namespace exercise_3_frontend.Pages
             String[] strlist = Instructions.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             foreach (String s in strlist)
             {
-                toAdd.Instructions.Add(s);
+                if (s.Trim()!="")
+                {
+                    toAdd.Instructions.Add(s.Trim());
+                }
             }
              strlist = Ingredients.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             foreach (String s in strlist)
             {
-                toAdd.Ingredients.Add(s);
+                if( s.Trim()!="")
+                toAdd.Ingredients.Add(s.Trim());
             }
 
             

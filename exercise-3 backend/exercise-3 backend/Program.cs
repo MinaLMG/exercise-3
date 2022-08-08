@@ -4,8 +4,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-var app = WebApplication.Create();
-Data data = new Data();
+var builder = WebApplication.CreateBuilder();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+var app = builder.Build();
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    options.RoutePrefix = String.Empty;
+});
+Data data = new Data(app);
 Pages pages = new Pages(data);
 pages.CategoryPages(app);
 pages.RecipePages(app);
@@ -29,11 +39,19 @@ public class Data
         }
     }
 
-    public Data()
+    public Data(WebApplication app)
     {
         this.Options = new JsonSerializerOptions { WriteIndented = true };
         string mainPath = Environment.CurrentDirectory;
-        this.CategoriesLoc = $@"{mainPath}\..\categories.json";
+
+        if (app.Environment.IsDevelopment())
+        {
+            this.CategoriesLoc = $@"{mainPath}\..\categories.json";
+        }
+        else
+        {
+            this.CategoriesLoc = $@"{mainPath}\categories.json";
+        }
         string categoriesString = File.ReadAllText(this.CategoriesLoc);
         this.Categories = JsonSerializer.Deserialize<List<Category>>(categoriesString);
         /****/
@@ -44,7 +62,14 @@ public class Data
             this.CategoriesMap[this.Categories[i].Name] = this.Categories[i].ID;
             this.CategoriesNamesMap[this.Categories[i].ID] = this.Categories[i].Name;
         }
-        this.RecipesLoc = $@"{mainPath}\..\recipes.json";
+        if (app.Environment.IsDevelopment())
+        {
+            this.RecipesLoc = $@"{mainPath}\..\recipes.json";
+        }
+        else
+        {
+            this.RecipesLoc = $@"{mainPath}\recipes.json";
+        }
         string recipesString = File.ReadAllText(this.RecipesLoc);
         this.Recipes = JsonSerializer.Deserialize<List<Recipe>>(recipesString);
     }
@@ -72,7 +97,9 @@ public class Data
             {
                 Guid toDelete2 = recipe.Categories.Single(x => x == id);
                 recipe.Categories.Remove(toDelete2);
-            }catch(Exception e){ 
+            }
+            catch (Exception e)
+            {
 
             }
         }
@@ -107,18 +134,97 @@ public class Data
 public class Pages
 {
     public Data Data { get; set; }
+    public IResult CheckCategory(Category c, string action, Guid id = new Guid())
+    {
+        if (c.Name == null || c.Name.Trim() == "")
+        {
+            return Results.BadRequest("name must be a non-empty field");
+            //at client: responseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult()
+        }
+        switch (action)
+        {
+            case "add":
+                this.Data.AddCategory(c);
+                return Results.Json(new { c.Name, c.ID });
 
+            case "edit":
+                Category toEdit = Data.EditCategory(id, c);
+                return Results.Json(toEdit);
+        }
+        // should not be called 
+        return Results.Ok();
+    }
+
+    public IResult CheckRecipe(Recipe r, string action, Guid id = new Guid())
+    {
+        if (r.Title == null || r.Title.Trim() == "")
+        {
+            return Results.BadRequest("title must be a non-empty field");
+        }
+        r.Title = r.Title.Trim();
+
+        List<string> instructions = new();
+        foreach (var instruction in r.Instructions)
+        {
+            if (instruction.Trim() != "")
+            {
+                instructions.Add(instruction);
+            }
+        }
+        if (instructions.Count == 0)
+        {
+            return Results.BadRequest("the recipe must have a non-zero number of instructions");
+        }
+        r.Instructions = instructions;
+
+        List<string> ingredients = new();
+        foreach (var ingredient in r.Ingredients)
+        {
+            if (ingredient.Trim() != "")
+            {
+                ingredients.Add(ingredient);
+            }
+        }
+        if (ingredients.Count == 0)
+        {
+            return Results.BadRequest("the recipe must have a non-zero number of instructions");
+        }
+        r.Ingredients = ingredients;
+
+        List<Guid> categories = new();
+        foreach (var category in r.Categories)
+        {
+            try
+            {
+                string temp = Data.CategoriesNamesMap[category];
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest("the recipe must have a real and existing categories");
+            }
+        }
+        switch (action)
+        {
+            case "add":
+                Data.AddRecipe(r);
+                return Results.Json(new { r.Title, r.Ingredients, r.Instructions, r.Categories, r.ID });
+
+            case "edit":
+                Recipe toEdit = Data.EditRecipe(id, r);
+                return Results.Json(toEdit);
+        }
+        // should not be called 
+        return Results.Ok();
+
+    }
     public IResult CreateCategory([FromBody] Category c)
     {
-        this.Data.AddCategory(c);
-        return Results.Json(new { c.Name, c.ID });
+        return CheckCategory(c, "add");
     }
 
     public IResult EditCategory(Guid id, [FromBody] Category c)
     {
-        Console.WriteLine("here");
-        Category toEdit = Data.EditCategory(id, c);
-        return Results.Json(toEdit);
+        return CheckCategory(c, "edit", id);
     }
     public IResult DeleteCategory(Guid id)
     {
@@ -129,15 +235,13 @@ public class Pages
 
     public IResult CreateRecipe([FromBody] Recipe r)
     {
-        Data.AddRecipe(r);
-        return Results.Json(new { r.Title, r.Ingredients, r.Instructions, r.Categories, r.ID });
+        return CheckRecipe(r, "add");
     }
 
     public IResult EditRecipe(Guid id, [FromBody] Recipe r)
     {
-        Console.WriteLine("here");
-        Recipe toEdit = Data.EditRecipe(id, r);
-        return Results.Json(toEdit);
+        return CheckRecipe(r, "edit", id);
+
     }
     public IResult DeleteRecipe(Guid id)
     {

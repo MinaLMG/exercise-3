@@ -15,7 +15,7 @@
 		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="post" asp-page="CreateRecipe">
+				<form method="post" asp-page="CreateRecipe" class="needs-validation" novalidate>
 					<div class="modal-header">
 						<h5 class="modal-title">Adding a new Recipe</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -29,16 +29,35 @@
 						<input type="text" class="form-control mb-3" id=@{
 							   x="name";
 							   	@x
-							   } name="title">
+							   } name="title" required value=@{
+							   x="";
+							   if(Model.Title!=""){
+							   x=Model.Title;
+							   }
+							   	@x
+							   }>
+						<div class="valid-feedback">
+							Looks good!
+						</div>
 						<input type="hidden" class="form-control" name="id">
 						<div class="form-floating mb-3">
 							<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@{
 									  x="floatingTextarea";
 									  	@x
 									  ;
-									  } style="height: 100px" name="ingredients">
-
-																												</textarea>
+									  } style="height: 100px" name="ingredients" required>
+								@{
+									x = "";
+									if (Model.Ingredients != "")
+									{
+										x = Model.Ingredients;
+									}
+									@x
+								}  
+								  </textarea>
+							<div class="valid-feedback">
+								Looks good!
+							</div>
 							<label for=@{
 								   x="floatingTextarea";
 								   	@x
@@ -50,8 +69,19 @@
 									  x="floatingTextarea2";
 									  	@x
 									  ;
-									  } style="height: 100px" name="instructions">
-																											</textarea>
+									  } style="height: 100px" name="instructions" required>
+								@{
+									x = "";
+									if (Model.Instructions != "")
+									{
+										x = Model.Instructions;
+									}
+									@x
+								}  
+								  </textarea>
+							<div class="valid-feedback">
+								Looks good!
+							</div>
 							<label for=@{
 								   x="floatingTextarea2";
 								   	@x
@@ -192,7 +222,7 @@
 												index2++;
 											}
 										}
-																																</textarea>
+																																																																										</textarea>
 									<label for=@{
 								   x="floatingTextarea";
 								   x+=recipe.ID;
@@ -217,7 +247,7 @@
 												index2++;
 											}
 										}
-																																</textarea>
+																																																																										</textarea>
 									<label for=@{
 								   x="floatingTextarea2";
 								   x+=recipe.ID;
@@ -361,3 +391,30 @@
 		</div>
 	</div>
 </div>
+<script>
+	if ("@Model.Open" == "create") {
+		console.log("enters");
+		var button = document.querySelector('.page-body.recipes button');
+		button.click();
+	}
+	// Example starter JavaScript for disabling form submissions if there are invalid fields
+	(function() {
+		'use strict'
+
+		// Fetch all the forms we want to apply custom Bootstrap validation styles to
+		var forms = document.querySelectorAll('.needs-validation')
+
+		// Loop over them and prevent submission
+		Array.prototype.slice.call(forms)
+			.forEach(function(form) {
+				form.addEventListener('submit', function(event) {
+					if (!form.checkValidity()) {
+						event.preventDefault()
+						event.stopPropagation()
+					}
+
+					form.classList.add('was-validated')
+				}, false)
+			})
+	})()
+</script>
