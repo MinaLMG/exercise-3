@@ -11,13 +11,12 @@
 		{
 
 			var index = 0;
-			<table class="table page-table" style="max-width: 90%;">
+			<table class="table page-table" >
 				<thead>
 					<tr>
-						<th scope="col">#</th>
-						<th scope="col">Name</th>
-						<th scope="col">ID</th>
-						<th scope="col">Actions</th>
+						<th scope="col" style="width: 55px;">#</th>
+						<th scope="col" class="name">Name</th>
+						<th scope="col" style="width: 130px;">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -27,7 +26,6 @@
 						<tr>
 							<td>@index</td>
 							<td>@category.Name</td>
-							<td>@category.ID</td>
 							<td class="flex">
 								<!-- Button trigger modal -->
 								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
