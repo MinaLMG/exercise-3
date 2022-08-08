@@ -13,12 +13,18 @@ namespace exercise_3_frontend.Pages
         public Guid ID { get; set; }
         [BindProperty]
         public string Name { get; set; }
+        private readonly IConfiguration Configuration;
+
+        public UpdateCategoryModel(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         public async Task<IActionResult>OnPost()
         {
             Category toEdit = new Category(Name);
             toEdit.ID = ID;
             var temp = JsonSerializer.Serialize(toEdit);
-            var res3 = await HttpClient.PutAsync("https://localhost:7295/categories/" + ID, new StringContent(temp, Encoding.UTF8, "application/json"));
+            var res3 = await HttpClient.PutAsync(Configuration["BaseUrl"]+"categories/" + ID, new StringContent(temp, Encoding.UTF8, "application/json"));
             return Redirect("/Categories");
         }
     }

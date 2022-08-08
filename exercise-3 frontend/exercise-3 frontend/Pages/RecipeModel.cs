@@ -24,9 +24,10 @@ namespace exercise_3_frontend.Pages
         public string Open { get; set; }
 
         private readonly ILogger<IndexModel> _logger;
-
-        public RecipeModel(ILogger<IndexModel> logger)
+        private readonly IConfiguration Configuration;
+        public RecipeModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
+            Configuration = configuration;
             _logger = logger;
         }
 
@@ -36,7 +37,7 @@ namespace exercise_3_frontend.Pages
         }
         public async Task ListCategories()
         {
-            var res = await HttpClient.GetAsync("https://localhost:7295/recipes");
+            var res = await HttpClient.GetAsync(Configuration["BaseUrl"]+"recipes");
             var serializeOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -45,7 +46,7 @@ namespace exercise_3_frontend.Pages
             List<Recipe> recipes = JsonSerializer.Deserialize<List<Recipe>>(inBetween, serializeOptions);
             this.Recipes = recipes;
             /* getting categories */
-            res = await HttpClient.GetAsync("https://localhost:7295/categories");
+            res = await HttpClient.GetAsync(Configuration["BaseUrl"]+"categories");
             inBetween = res.Content.ReadAsStringAsync().Result;
             List<Category> categories = JsonSerializer.Deserialize<List<Category>>(inBetween, serializeOptions);
             this.Categories = categories;

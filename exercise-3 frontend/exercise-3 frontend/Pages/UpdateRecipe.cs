@@ -19,6 +19,12 @@ namespace exercise_3_frontend.Pages
         public string Instructions { get; set; }
         [BindProperty]
         public Guid[] Categories { get; set; } = new Guid[0];
+        private readonly IConfiguration Configuration;
+
+        public UpdateRecipeModel(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         public async Task<IActionResult> OnPost()
         {
             Recipe toEdit = new Recipe("", new(), new(), new());
@@ -48,7 +54,7 @@ namespace exercise_3_frontend.Pages
 
 
             var temp = JsonSerializer.Serialize(toEdit);
-            var res = await HttpClient.PutAsync("https://localhost:7295/recipes/" + ID, new StringContent(temp, Encoding.UTF8, "application/json"));
+            var res = await HttpClient.PutAsync(Configuration["BaseUrl"]+"recipes/" + ID, new StringContent(temp, Encoding.UTF8, "application/json"));
             return Redirect("/Recipes?c=9");
         }
 

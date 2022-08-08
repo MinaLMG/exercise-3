@@ -142,8 +142,18 @@ body {
     width: 100%;
     position: absolute
 }
-
-.page-body {
+    .index-body .card{
+    width:42%;
+    max-width:18rem;
+    }
+    .index-body .card:first-child {
+    margin-right:5%;
+}
+@media (max-width:570px) {
+    .index-body {
+    }
+}
+    .page-body {
     display: flex;
     justify-content: center;
     align-items: center;

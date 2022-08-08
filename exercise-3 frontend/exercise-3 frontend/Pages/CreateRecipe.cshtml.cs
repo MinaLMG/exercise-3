@@ -17,6 +17,12 @@ namespace exercise_3_frontend.Pages
         [BindProperty]
         public Guid[] Categories { get; set; } = new Guid[0];
         public HttpClient HttpClient = new();
+        private readonly IConfiguration Configuration;
+
+        public CreateRecipeModel(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         public async Task<IActionResult> OnPost()
         {
             Recipe toAdd = new Recipe("",new(),new(),new());
@@ -46,7 +52,7 @@ namespace exercise_3_frontend.Pages
 
             
                 var temp = JsonSerializer.Serialize(toAdd);
-                var res = await HttpClient.PostAsync("https://localhost:7295/recipes", new StringContent(temp, Encoding.UTF8, "application/json"));
+                var res = await HttpClient.PostAsync(Configuration["BaseUrl"]+"recipes", new StringContent(temp, Encoding.UTF8, "application/json"));
                 return Redirect("/Recipes");
             
         }

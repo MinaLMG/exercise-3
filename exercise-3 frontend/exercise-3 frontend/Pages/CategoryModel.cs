@@ -13,10 +13,11 @@ namespace exercise_3_frontend.Pages
         [BindProperty]
         public string Name { get; set; }
         private readonly ILogger<IndexModel> _logger;
-
-        public CategoryModel(ILogger<IndexModel> logger)
+        private readonly IConfiguration Configuration;
+        public CategoryModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
+            Configuration = configuration;
         }
 
         public async Task OnGet()
@@ -25,7 +26,7 @@ namespace exercise_3_frontend.Pages
         }
         public async Task ListCategories()
         {
-            var res = await HttpClient.GetAsync("https://localhost:7295/categories");
+            var res = await HttpClient.GetAsync(Configuration["BaseUrl"]+"categories");
             var serializeOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -38,7 +39,7 @@ namespace exercise_3_frontend.Pages
         {
             Category toAdd = new Category(Name);
             var temp = JsonSerializer.Serialize(toAdd);
-            var res = await HttpClient.PostAsync("https://localhost:7295/categories", new StringContent(temp, Encoding.UTF8, "application/json"));
+            var res = await HttpClient.PostAsync(Configuration["BaseUrl"]+"categories", new StringContent(temp, Encoding.UTF8, "application/json"));
             return Redirect("/Categories");
         }
     }
