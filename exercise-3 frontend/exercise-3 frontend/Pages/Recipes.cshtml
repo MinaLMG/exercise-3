@@ -45,16 +45,14 @@
 									  x="floatingTextarea";
 									  	@x
 									  ;
-									  } style="height: 100px" name="ingredients" required>
-								@{
+									  } style="height: 100px" name="ingredients" required>@{
 									x = "";
 									if (Model.Ingredients != "")
 									{
 										x = Model.Ingredients;
 									}
 									@x
-								}  
-								  </textarea>
+								}</textarea>
 							<div class="valid-feedback">
 								Looks good!
 							</div>
@@ -69,16 +67,14 @@
 									  x="floatingTextarea2";
 									  	@x
 									  ;
-									  } style="height: 100px" name="instructions" required>
-								@{
+									  } style="height: 100px" name="instructions" required>@{
 									x = "";
 									if (Model.Instructions != "")
 									{
 										x = Model.Instructions;
 									}
 									@x
-								}  
-								  </textarea>
+								}</textarea>
 							<div class="valid-feedback">
 								Looks good!
 							</div>
@@ -222,7 +218,7 @@
 												index2++;
 											}
 										}
-																																																																										</textarea>
+																																																																														</textarea>
 									<label for=@{
 								   x="floatingTextarea";
 								   x+=recipe.ID;
@@ -247,7 +243,7 @@
 												index2++;
 											}
 										}
-																																																																										</textarea>
+																																																																														</textarea>
 									<label for=@{
 								   x="floatingTextarea2";
 								   x+=recipe.ID;
@@ -392,11 +388,6 @@
 	</div>
 </div>
 <script>
-	if ("@Model.Open" == "create") {
-		console.log("enters");
-		var button = document.querySelector('.page-body.recipes button');
-		button.click();
-	}
 	// Example starter JavaScript for disabling form submissions if there are invalid fields
 	(function() {
 		'use strict'
