@@ -32,13 +32,13 @@
 								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
 								x="#editModal";
 								x+=category.ID;
-																@x
+									@x
 								;
 								}
 								id=@{
 								x="#editButton";
 								x+=category.ID;
-																@x
+									@x
 								;
 								}>
 									<img class="action" src="~/Images/edit.png" alt="edit"></img>
@@ -48,7 +48,7 @@
 								<div class="modal fade" id=@{
 							 x="editModal";
 							 x+=category.ID;
-														 	@x
+							 	@x
 							 ;
 							 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
@@ -59,7 +59,7 @@
 													<h5 class="modal-title" id=@{
 												x="exampleModalLabel";
 												x+=category.ID;
-																				@x
+													@x
 												}>
 														Editing a Category
 													</h5>
@@ -69,18 +69,18 @@
 													<label for=@{
 												   x="name";
 												   x+=category.ID;
-																			   	@x
+												   	@x
 												   }
 												   class="form-label">Name</label>
 													<input type="text" class="form-control" id=@{
 												   x="name";
 												   x+=category.ID;
-																			   	@x
+												   	@x
 												   } name="name" value=@{
 												   x = category.Name;
 												   if(!string.IsNullOrEmpty(@Model.ID) && Model.ID==category.ID.ToString() && !string.IsNullOrEmpty(@Model.Name))
 												   x=Model.Name;
-																			   	@x
+												   	@x
 												   }
 												   required>
 													<input type="hidden" class="form-control" name="id" value="@category.ID" required>
@@ -98,7 +98,7 @@
 								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target=@{
 								x="#deleteModal";
 								x+=category.ID;
-																@x
+									@x
 								}>
 									<img class="action" src="~/Images/bin.png" alt="delete"></img>
 								</button>
@@ -107,7 +107,7 @@
 								<div class="modal fade" id=@{
 							 x="deleteModal";
 							 x+=category.ID;
-														 	@x
+							 	@x
 							 ;
 							 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
@@ -118,7 +118,7 @@
 													<h5 class="modal-title" id=@{
 												x="exampleModalLabel";
 												x+=category.ID;
-																				@x
+													@x
 												}>
 														Deleting a Category
 													</h5>
@@ -208,7 +208,7 @@
 					   x = "";
 					   if(string.IsNullOrEmpty(@Model.ID) && !string.IsNullOrEmpty(@Model.Name))
 					   x=Model.Name;
-																		   	@x
+																			   	@x
 					   }" required>
 			</div>
 			<button type="submit" class="btn btn-primary" onclick="return validateAddData();">Add Category</button>
@@ -236,12 +236,12 @@
 		swal.fire({ title: "Success", text: `@Model.Msg`, "icon": "success" });
 	if (`@Model.ReqResult` == "failure")
 		swal.fire({ title: "Failed", text: `@Model.Msg`, "icon": "error" });
-if (`@Model.ID` != ``) {
-    var el = document.getElementById('@{
+	if (`@Model.ID` != ``) {
+		var el = document.getElementById('@{
 		x = "#editButton";
-        x += Model.ID;
-			@x
-        }');
-setTimeout(() => { el.click(); }, 10);
-}
+		x += Model.ID;
+		@x
+	}');
+	setTimeout(() => { el.click(); }, 10);
+	}
 </script>

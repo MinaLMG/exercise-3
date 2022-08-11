@@ -13,6 +13,12 @@ namespace exercise_3_frontend.Pages
         public Dictionary<Guid, string> categoriesNamesMap = new Dictionary<Guid, string>();
 
         [BindProperty(SupportsGet = true)]
+        public string ReqResult { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Msg { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string ID { get; set; }
+        [BindProperty(SupportsGet = true)]
         public string Title { get; set; }
         [BindProperty(SupportsGet = true)]
         public string Ingredients { get; set; }

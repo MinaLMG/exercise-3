@@ -24,7 +24,7 @@ namespace exercise_3_frontend.Pages
             Category toEdit = new Category(Name);
             toEdit.ID = ID;
             var temp = JsonSerializer.Serialize(toEdit);
-            var res = await HttpClient.PutAsync(Configuration["BaseUrl"]+"cegories/" + ID, new StringContent(temp, Encoding.UTF8, "application/json"));
+            var res = await HttpClient.PutAsync(Configuration["BaseUrl"]+"categories/" + ID, new StringContent(temp, Encoding.UTF8, "application/json"));
             if ((int)res.StatusCode == 200)
                 return Redirect("/Categories?ReqResult=success&Msg=the category has been updated successfully");
             else

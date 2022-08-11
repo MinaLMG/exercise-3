@@ -25,8 +25,8 @@ namespace exercise_3_frontend.Pages
         }
         public async Task<IActionResult> OnPost()
         {
-            Recipe toAdd = new Recipe("",new(),new(),new());
-            
+            Recipe toAdd = new Recipe("", new(), new(), new());
+
             toAdd.Title = Title.Trim();
             foreach (Guid category in Categories)
             {
@@ -38,23 +38,27 @@ namespace exercise_3_frontend.Pages
             String[] strlist = Instructions.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             foreach (String s in strlist)
             {
-                if (s.Trim()!="")
+                if (s.Trim() != "")
                 {
                     toAdd.Instructions.Add(s.Trim());
                 }
             }
-             strlist = Ingredients.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            strlist = Ingredients.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             foreach (String s in strlist)
             {
-                if( s.Trim()!="")
-                toAdd.Ingredients.Add(s.Trim());
+                if (s.Trim() != "")
+                    toAdd.Ingredients.Add(s.Trim());
             }
 
-            
-                var temp = JsonSerializer.Serialize(toAdd);
-                var res = await HttpClient.PostAsync(Configuration["BaseUrl"]+"recipes", new StringContent(temp, Encoding.UTF8, "application/json"));
-                return Redirect("/Recipes");
-            
+
+            var temp = JsonSerializer.Serialize(toAdd);
+            var res = await HttpClient.PostAsync(Configuration["BaseUrl"] + "recipes", new StringContent(temp, Encoding.UTF8, "application/json"));
+            if ((int)res.StatusCode == 200)
+                return Redirect("/recipes?ReqResult=success&Msg=your recipe has been added successfully");
+            else
+                return Redirect("/recipes?ReqResult=failure&Msg=something went wrong with your request .. check your data and try again&open=add&title=" + Title +"&instructions=" + Instructions+ "&ingredients=" + Ingredients);
+
+
         }
     }
 }

@@ -58,7 +58,7 @@ namespace exercise_3_frontend.Pages
             if ((int)res.StatusCode == 200)
                 return Redirect("/recipes?ReqResult=success&Msg=the recipe has been updated successfully");
             else
-                return Redirect("/recipes?ReqResult=failure&Msg=something went wrong with your request .. review your data and try again");
+                return Redirect("/recipes?ReqResult=failure&Msg=something went wrong with your request .. review your data and try again&open=edit&title=" + Title+"&id="+ID); /*+ "&instructions=" + Instructions + "&ingredients=" + Ingredients);*/
 
         }
 

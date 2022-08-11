@@ -26,12 +26,9 @@
 							   	@x
 							   ;
 							   } class="form-label ">Title</label>
-						<input type="text" class="form-control mb-3" id=@{
-							   x="name";
-							   	@x
-							   } name="title" required value=@{
+						<input type="text" class="form-control mb-3" id="title" name="title" required value=@{
 							   x="";
-							   if(Model.Title!=""){
+							   if(Model.Title!="" &&string.IsNullOrEmpty(@Model.ID) ){
 							   x=Model.Title;
 							   }
 							   	@x
@@ -47,7 +44,7 @@
 									  ;
 									  } style="height: 100px" name="ingredients" required>@{
 									x = "";
-									if (Model.Ingredients != "")
+									if (Model.Ingredients != "" && string.IsNullOrEmpty(@Model.ID))
 									{
 										x = Model.Ingredients;
 									}
@@ -69,7 +66,7 @@
 									  ;
 									  } style="height: 100px" name="instructions" required>@{
 									x = "";
-									if (Model.Instructions != "")
+									if (Model.Instructions != "" && string.IsNullOrEmpty(@Model.ID))
 									{
 										x = Model.Instructions;
 									}
@@ -113,7 +110,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Add</button>
+						<button type="submit" class="btn btn-primary" onclick="return validateAddData();">Add</button>
 					</div>
 				</form>
 			</div>
@@ -133,7 +130,7 @@
 		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
-						<form method="post" asp-page="UpdateRecipe"class="needs-validation" novalidate>
+						<form method="post" asp-page="UpdateRecipe" class="needs-validation" novalidate>
 							<div class="modal-header">
 								<h5 class="modal-title">@recipe.Title</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -195,7 +192,7 @@
 							   ;
 							   } class="form-label ">Title</label>
 								<input type="text" class="form-control mb-3" id=@{
-							   x="name";
+							   x="title";
 							   x+=recipe.ID;
 							   	@x
 							   ;
@@ -218,7 +215,7 @@
 												index2++;
 											}
 										}
-																																																																														</textarea>
+																																																																																																</textarea>
 									<label for=@{
 								   x="floatingTextarea";
 								   x+=recipe.ID;
@@ -243,7 +240,7 @@
 												index2++;
 											}
 										}
-																																																																														</textarea>
+																																																																																																</textarea>
 									<label for=@{
 								   x="floatingTextarea2";
 								   x+=recipe.ID;
@@ -292,7 +289,7 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-								<button type="submit" class="btn btn-primary">Save changes</button>
+								<button type="submit" class="btn btn-primary" onclick="return validateEditData(`@recipe.ID`)">Save changes</button>
 							</div>
 						</form>
 					</div>
@@ -337,7 +334,11 @@
 					x="#addModal";
 						@x
 					;
-					}>
+					} id="@{
+					x="#addButton";
+										@x
+					;
+					}">
 				<img class="action" src="~/Images/add.png" alt="add" />
 
 			</button>
@@ -367,6 +368,10 @@
 							x="#editModal";
 							x+=recipe.ID;
 								@x
+							} id=@{
+							x="#editButton";
+							x+=recipe.ID;
+								@x
 							}>
 								<img class="action" src="~/Images/edit.png" alt="edit" />
 							</button>
@@ -388,3 +393,53 @@
 	</div>
 </div>
 
+<script type="text/javascript">
+	function validateAddData() {
+		if ($("#title").val().trim() == "") {
+			swal.fire({ title: "Recipe Tiltle", text: "Please enter recipe title .. it can't be empty !", "icon": "info" });
+			return false;
+		}
+		if ($("#floatingTextarea").val().trim() == "") {
+			swal.fire({ title: "Recipe Ingredients", text: "Please enter recipe ingredients .. they can't be empty !", "icon": "info" });
+			return false;
+		}
+		if ($("#floatingTextarea2").val().trim() == "") {
+			swal.fire({ title: "Recipe Instructions", text: "Please enter recipe instructions .. they can't be empty !", "icon": "info" });
+			return false;
+		} else {
+			return true;
+		}
+	}
+	function validateEditData(id) {
+		if ($("#title" + id).val().trim() == "") {
+			swal.fire({ title: "Recipe Tiltle", text: "Please enter recipe title .. it can't be empty !", "icon": "info" });
+			return false;
+		}
+		if ($("#floatingTextarea" + id).val().trim() == "") {
+			swal.fire({ title: "Recipe Ingredients", text: "Please enter recipe ingredients .. they can't be empty !", "icon": "info" });
+			return false;
+		}
+		if ($("#floatingTextarea2" + id).val().trim() == "") {
+			swal.fire({ title: "Recipe Instructions", text: "Please enter recipe instructions .. they can't be empty !", "icon": "info" });
+			return false;
+		} else {
+			return true;
+		}
+	}
+	if (`@Model.ReqResult` == "success")
+		swal.fire({ title: "Success", text: `@Model.Msg`, "icon": "success" });
+	if (`@Model.ReqResult` == "failure")
+		swal.fire({ title: "Failed", text: `@Model.Msg`, "icon": "error" });
+	if (`@Model.Open` == "add" && `@Model.ID` == ``) {
+		var el = document.getElementById("#addButton");
+		setTimeout(() => { el.click(); }, 10);
+	}
+	if (`@Model.Open` == "edit" && `@Model.ID` != ``) {
+		var el = document.getElementById('@{
+		x = "#editButton";
+		x += Model.ID;
+		@x
+	}');
+										setTimeout(() => { el.click(); }, 10);
+	}
+</script>
