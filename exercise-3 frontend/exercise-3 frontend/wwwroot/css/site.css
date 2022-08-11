@@ -180,7 +180,7 @@ body {
 }
 
 .recipes .page-body-elements {
-    width: 100%;
+    width: 95%;
 }
 
 .page-body-elements h1 {
@@ -238,13 +238,13 @@ body {
     }
 }
 
-@media(max-width:475px) {
+@media(max-width:505px) {
     .recipe-card {
         width: 48%;
     }
 }
 
-@media(max-width:300px) {
+@media(max-width:320px) {
     .recipe-card {
         width: 70%;
     }
@@ -345,7 +345,6 @@ img.action {
     }
 
     .page-body-elements {
-        max-width: 80%;
         margin-top: 10vh !important;
         transform: none !important;
     }

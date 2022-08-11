@@ -133,7 +133,7 @@
 		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
-						<form method="post" asp-page="UpdateRecipe">
+						<form method="post" asp-page="UpdateRecipe"class="needs-validation" novalidate>
 							<div class="modal-header">
 								<h5 class="modal-title">@recipe.Title</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -182,7 +182,7 @@
 		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
-						<form method="post" asp-page="UpdateRecipe">
+						<form method="post" asp-page="UpdateRecipe" class="needs-validation" novalidate>
 							<div class="modal-header">
 								<h5 class="modal-title">Editing a Recipe</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -199,7 +199,7 @@
 							   x+=recipe.ID;
 							   	@x
 							   ;
-							   } name="title" value="@recipe.Title">
+							   } name="title" value="@recipe.Title" required>
 								<input type="hidden" class="form-control" name="id" value="@recipe.ID">
 								<div class="form-floating mb-3">
 									<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@{
@@ -207,7 +207,7 @@
 									  x+=recipe.ID;
 									  	@x
 									  ;
-									  } style="height: 100px" name="ingredients">
+									  } style="height: 100px" name="ingredients" required>
 										@{
 											var index2 = 0;
 											@foreach (var ingredient in recipe.Ingredients)
@@ -232,7 +232,7 @@
 									  x+=recipe.ID;
 									  	@x
 									  ;
-									  } style="height: 100px" name="instructions">
+									  } style="height: 100px" name="instructions" required>
 										@{
 											index2 = 0;
 											@foreach (var instruction in recipe.Instructions)
@@ -387,25 +387,4 @@
 		</div>
 	</div>
 </div>
-<script>
-	// Example starter JavaScript for disabling form submissions if there are invalid fields
-	(function() {
-		'use strict'
 
-		// Fetch all the forms we want to apply custom Bootstrap validation styles to
-		var forms = document.querySelectorAll('.needs-validation')
-
-		// Loop over them and prevent submission
-		Array.prototype.slice.call(forms)
-			.forEach(function(form) {
-				form.addEventListener('submit', function(event) {
-					if (!form.checkValidity()) {
-						event.preventDefault()
-						event.stopPropagation()
-					}
-
-					form.classList.add('was-validated')
-				}, false)
-			})
-	})()
-</script>

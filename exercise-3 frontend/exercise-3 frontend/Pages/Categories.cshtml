@@ -3,6 +3,7 @@
 @{
 	ViewData["Title"] = "Categories";
 	ViewData["active"] = "Categories";
+	var x = "";
 }
 <div class="page-body categories">
 	<div class="page-body-elements">
@@ -11,7 +12,7 @@
 		{
 
 			var index = 0;
-			<table class="table page-table" >
+			<table class="table page-table">
 				<thead>
 					<tr>
 						<th scope="col" style="width: 55px;">#</th>
@@ -29,7 +30,7 @@
 							<td class="flex">
 								<!-- Button trigger modal -->
 								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
-								var x="#editModal";
+								x="#editModal";
 								x+=category.ID;
 									@x
 								;
@@ -46,7 +47,7 @@
 							 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
 										<div class="modal-content">
-											<form method="post" asp-page="UpdateCategory">
+											<form method="post" asp-page="UpdateCategory" class="needs-validation" novalidate>
 												@*<form method="post" asp-page="/UpdateCategory/@category.ID">*@
 												<div class="modal-header">
 													<h5 class="modal-title" id=@{
@@ -69,13 +70,14 @@
 												   x="name";
 												   x+=category.ID;
 												   	@x
-												   } name="name" value="@category.Name">
-													<input type="hidden" class="form-control" name="id" value="@category.ID">
+												   } name="name" value="@category.Name" required>
+													<input type="hidden" class="form-control" name="id" value="@category.ID" required>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-													<button type="submit" class="btn btn-primary">Save changes</button>
+													<button type="submit" class="btn btn-primary" onclick="return validateEditData(`@category.ID`)">Save changes</button>
 												</div>
+
 											</form>
 										</div>
 									</div>
@@ -98,7 +100,7 @@
 							 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
 										<div class="modal-content">
-											<form method="post" asp-page="DeleteCategory">
+											<form method="post" asp-page="DeleteCategory" class="needs-validation" novalidate>
 												<input type="hidden" class="form-control" name="id" value="@category.ID">
 												<div class="modal-header">
 													<h5 class="modal-title" id=@{
@@ -187,12 +189,39 @@
 	</div>
 	<div class="page-body-actions">
 		<h4 class="text-center">New Category </h4>
-		<form method="post">
+		<form method="post" class="needs-validation" novalidate>
 			<div class="mb-3">
 				<label for="name" class="form-label white">Name</label>
-				<input type="text" class="form-control" id="name" name="name">
+				<input type="text" class="form-control" id="name" name="name" value="@{
+					   x = "";
+					   if(!string.IsNullOrEmpty(@Model.Name))
+					   x="name";
+					   	@x
+					   }" required >
 			</div>
-			<button type="submit" class="btn btn-primary">Add Category</button>
+			<button type="submit" class="btn btn-primary" onclick="return validateAddData();">Add Category</button>
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+	function validateAddData() {
+		if ($("#name").val().trim() == "") {
+			swal.fire({ title: "Category Name", text: "Please enter category name .. it can't be empty !", "icon": "info" });
+			return false;
+		} else {
+			return true;
+		}
+	}
+	function validateEditData(id) {
+		if ($("#name"+id).val().trim() == "") {
+			swal.fire({ title: "Category Name", text: "Please enter category name .. it can't be empty !", "icon": "info" });
+			return false;
+		} else {
+			return true;
+		}
+	}
+	if (`@Model.ReqResult` == "success")
+		swal.fire({ title: "Success", text: `@Model.Msg`, "icon": "success" });
+	if (`@Model.ReqResult` == "failure")
+		swal.fire({ title: "Failed", text: `@Model.Msg`, "icon": "error" });
+</script>

@@ -19,8 +19,13 @@ namespace exercise_3_frontend.Pages
         }
         public async Task<IActionResult> OnPost()
         {
-            var res3 = await HttpClient.DeleteAsync(Configuration["BaseUrl"]+"categories/" + ID);
-            return Redirect("/Categories");
+            var res = await HttpClient.DeleteAsync(Configuration["BaseUrl"]+"categories/" + ID);
+
+            if ((int)res.StatusCode == 200)
+                return Redirect("/Categories?ReqResult=success&Msg=the category has been deleted successfully");
+            else
+                return Redirect("/Categories?ReqResult=failure&Msg=something went wrong with your request .. you can retry after some seconds");
+
         }
     }
 }

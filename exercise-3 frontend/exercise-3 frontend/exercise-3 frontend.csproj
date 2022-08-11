@@ -7,4 +7,8 @@
     <RootNamespace>exercise_3_frontend</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="SweetAlert" Version="1.0.0" />
+  </ItemGroup>
+
 </Project>

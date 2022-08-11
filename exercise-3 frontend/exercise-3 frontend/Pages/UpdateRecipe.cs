@@ -55,7 +55,11 @@ namespace exercise_3_frontend.Pages
 
             var temp = JsonSerializer.Serialize(toEdit);
             var res = await HttpClient.PutAsync(Configuration["BaseUrl"]+"recipes/" + ID, new StringContent(temp, Encoding.UTF8, "application/json"));
-            return Redirect("/Recipes?c=9");
+            if ((int)res.StatusCode == 200)
+                return Redirect("/recipes?ReqResult=success&Msg=the recipe has been updated successfully");
+            else
+                return Redirect("/recipes?ReqResult=failure&Msg=something went wrong with your request .. review your data and try again");
+
         }
 
     }
