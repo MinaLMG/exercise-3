@@ -10,12 +10,14 @@ namespace exercise_3_frontend.Pages
     {
         public HttpClient HttpClient = new();
         public List<Category> Categories = new();
-        [BindProperty (SupportsGet =true)]
-        public string Name { get; set; }
         [BindProperty(SupportsGet = true)]
         public string ReqResult { get; set; }
         [BindProperty(SupportsGet = true)]
         public string Msg { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string ID { get; set; }
+        [BindProperty (SupportsGet =true)]
+        public string Name { get; set; }
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration Configuration;
         public CategoryModel(ILogger<IndexModel> logger, IConfiguration configuration)
