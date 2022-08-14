@@ -33,13 +33,11 @@
 								x="#editModal";
 								x+=category.ID;
 									@x
-								;
 								}
 								id=@{
 								x="#editButton";
 								x+=category.ID;
 									@x
-								;
 								}>
 									<img class="action" src="~/Images/edit.png" alt="edit"></img>
 								</button>
@@ -49,11 +47,10 @@
 							 x="editModal";
 							 x+=category.ID;
 							 	@x
-							 ;
 							 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
 										<div class="modal-content">
-											<form method="post" asp-page="UpdateCategory" class="needs-validation" novalidate>
+											<form method="post" asp-page-handler="UpdateCategory" class="needs-validation" novalidate>
 												@*<form method="post" asp-page="/UpdateCategory/@category.ID">*@
 												<div class="modal-header">
 													<h5 class="modal-title" id=@{
@@ -78,7 +75,7 @@
 												   	@x
 												   } name="name" value=@{
 												   x = category.Name;
-												   if(!string.IsNullOrEmpty(@Model.ID) && Model.ID==category.ID.ToString() && !string.IsNullOrEmpty(@Model.Name))
+												   if(Model.ID!=new Guid() && Model.ID==category.ID && !string.IsNullOrEmpty(@Model.Name))
 												   x=Model.Name;
 												   	@x
 												   }
@@ -99,7 +96,9 @@
 								x="#deleteModal";
 								x+=category.ID;
 									@x
-								}>
+								}
+								id=@("deleteButton"+category.ID)
+								>
 									<img class="action" src="~/Images/bin.png" alt="delete"></img>
 								</button>
 
@@ -112,7 +111,7 @@
 							 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
 										<div class="modal-content">
-											<form method="post" asp-page="DeleteCategory" class="needs-validation" novalidate>
+											<form method="post" asp-page-handler="DeleteCategory" class="needs-validation" novalidate>
 												<input type="hidden" class="form-control" name="id" value="@category.ID">
 												<div class="modal-header">
 													<h5 class="modal-title" id=@{
@@ -135,61 +134,9 @@
 										</div>
 									</div>
 								</div>
-
 							</td>
 						</tr>
 					}
-					@*<tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr><tr>
-				<th scope="row">index</th>
-				<td>category.Name</td>
-				<td>category.ID</td>
-				<td></td>
-				</tr>*@
 				</tbody>
 			</table>
 		}
@@ -201,14 +148,14 @@
 	</div>
 	<div class="page-body-actions">
 		<h4 class="text-center">New Category </h4>
-		<form method="post" class="needs-validation" novalidate>
+		<form method="post" asp-page-handler="AddCategory" class="needs-validation" novalidate>
 			<div class="mb-3">
 				<label for="name" class="form-label white">Name</label>
 				<input type="text" class="form-control" id="name" name="name" value="@{
 					   x = "";
-					   if(string.IsNullOrEmpty(@Model.ID) && !string.IsNullOrEmpty(@Model.Name))
+					   if(Model.ID==new Guid() && !string.IsNullOrEmpty(@Model.Name))
 					   x=Model.Name;
-																			   	@x
+																														   	@x
 					   }" required>
 			</div>
 			<button type="submit" class="btn btn-primary" onclick="return validateAddData();">Add Category</button>
@@ -236,12 +183,12 @@
 		swal.fire({ title: "Success", text: `@Model.Msg`, "icon": "success" });
 	if (`@Model.ReqResult` == "failure")
 		swal.fire({ title: "Failed", text: `@Model.Msg`, "icon": "error" });
-	if (`@Model.ID` != ``) {
-		var el = document.getElementById('@{
-		x = "#editButton";
-		x += Model.ID;
-		@x
-	}');
-	setTimeout(() => { el.click(); }, 10);
+	if (`@(Model.ID!=new Guid())` && `@Model.Open` == "edit") {
+		var el = document.getElementById(`@("editButton"+ Model.ID)`);
+		setTimeout(() => { el.click(); }, 10);
+	}
+	if (`@(Model.ID!=new Guid())` && `@Model.Open` == "delete") {
+		var el = document.getElementById(`@("deleteButton"+ Model.ID)`);
+		setTimeout(() => { el.click(); }, 10);
 	}
 </script>

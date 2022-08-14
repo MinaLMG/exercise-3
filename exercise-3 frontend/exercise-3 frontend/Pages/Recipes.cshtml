@@ -15,7 +15,7 @@
 		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="post" asp-page="CreateRecipe" class="needs-validation" novalidate>
+				<form method="post" asp-page-handler="CreateRecipe" class="needs-validation" novalidate>
 					<div class="modal-header">
 						<h5 class="modal-title">Adding a new Recipe</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -28,7 +28,7 @@
 							   } class="form-label ">Title</label>
 						<input type="text" class="form-control mb-3" id="title" name="title" required value=@{
 							   x="";
-							   if(Model.Title!="" &&string.IsNullOrEmpty(@Model.ID) ){
+							   if(Model.Title!="" && Model.ID==new Guid()){
 							   x=Model.Title;
 							   }
 							   	@x
@@ -44,7 +44,7 @@
 									  ;
 									  } style="height: 100px" name="ingredients" required>@{
 									x = "";
-									if (Model.Ingredients != "" && string.IsNullOrEmpty(@Model.ID))
+									if (Model.Ingredients != "" && Model.ID == new Guid())
 									{
 										x = Model.Ingredients;
 									}
@@ -66,7 +66,7 @@
 									  ;
 									  } style="height: 100px" name="instructions" required>@{
 									x = "";
-									if (Model.Instructions != "" && string.IsNullOrEmpty(@Model.ID))
+									if (Model.Instructions != "" && Model.ID == new Guid())
 									{
 										x = Model.Instructions;
 									}
@@ -83,7 +83,7 @@
 						</div>
 						<div class="form-floating mb-3">
 							<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
-								@foreach (var category in Model.Categories)
+								@foreach (var category in Model.CategoriesList)
 								{
 									x = "";
 									<input name="categories"
@@ -91,10 +91,10 @@
 									   x = "btncheckedit";
 									   x+=category.ID;
 									   	@x
-									   ;
 									   }
 									   value=@category.ID
-									   autocomplete="off">
+									   autocomplete="off"
+									   @(Model.Open=="add"?(Model.Categories.Any(c=> c== category.ID) ?"checked":""):"")>
 									<label class="btn btn-outline-danger"
 									   for=@{
 									   x="btncheckedit";
@@ -120,7 +120,6 @@
 	{
 		@foreach (var recipe in Model.Recipes)
 		{
-			;
 			<!--showing Modal -->
 			<div class="modal fade" id=@{
 		 x="showModal";
@@ -130,43 +129,41 @@
 		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
-						<form method="post" asp-page="UpdateRecipe" class="needs-validation" novalidate>
-							<div class="modal-header">
-								<h5 class="modal-title">@recipe.Title</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						<div class="modal-header">
+							<h5 class="modal-title">@recipe.Title</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body show">
+							<div class="label">
+								ingredients
 							</div>
-							<div class="modal-body show">
-								<div class="label">
-									ingredients
-								</div>
-								<div class="ingredients mb-3">
-									@foreach (var ingredient in recipe.Ingredients)
-									{
-										<div>@ingredient</div>
-									}
-								</div>
-								<div class="label">
-									instructions
-								</div>
-								<div class="instructions mb-3">
-									<ol>
-										@foreach (var instruction in recipe.Instructions)
-										{
-											<li> <div>@instruction</div></li>
-										}
-									</ol>
-								</div>
-								<div class="label">
-									categories
-								</div>
-								<div class="categories mb-3">
-									@foreach (var category in recipe.Categories)
-									{
-										<div class="category">@Model.categoriesNamesMap[category]</div>
-									}
-								</div>
+							<div class="ingredients mb-3">
+								@foreach (var ingredient in recipe.Ingredients)
+								{
+									<div>@ingredient</div>
+								}
 							</div>
-						</form>
+							<div class="label">
+								instructions
+							</div>
+							<div class="instructions mb-3">
+								<ol>
+									@foreach (var instruction in recipe.Instructions)
+									{
+										<li> <div>@instruction</div></li>
+									}
+								</ol>
+							</div>
+							<div class="label">
+								categories
+							</div>
+							<div class="categories mb-3">
+								@foreach (var category in recipe.Categories)
+								{
+									<div class="category">@Model.categoriesNamesMap[category]</div>
+								}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -179,7 +176,7 @@
 		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
-						<form method="post" asp-page="UpdateRecipe" class="needs-validation" novalidate>
+						<form method="post" asp-page-handler="UpdateRecipe" class="needs-validation" novalidate>
 							<div class="modal-header">
 								<h5 class="modal-title">Editing a Recipe</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -196,7 +193,7 @@
 							   x+=recipe.ID;
 							   	@x
 							   ;
-							   } name="title" value="@recipe.Title" required>
+							   } name="title" value="@(Model.Open=="edit"?Model.Title:recipe.Title)" required>
 								<input type="hidden" class="form-control" name="id" value="@recipe.ID">
 								<div class="form-floating mb-3">
 									<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@{
@@ -207,15 +204,21 @@
 									  } style="height: 100px" name="ingredients" required>
 										@{
 											var index2 = 0;
-											@foreach (var ingredient in recipe.Ingredients)
+											if (Model.Open == "edit")
+												@Model.Ingredients
+											else
 											{
-												x = index2 > 0 ? "\r\n" : "";
-												x += ingredient;
-												@x
-												index2++;
+												@foreach (var ingredient in recipe.Ingredients)
+												{
+													x = index2 > 0 ? "\r\n" : "";
+													x += ingredient;
+													@x
+													index2++;
+												}
+
 											}
 										}
-																																																																																																</textarea>
+																																																																																																																</textarea>
 									<label for=@{
 								   x="floatingTextarea";
 								   x+=recipe.ID;
@@ -232,15 +235,17 @@
 									  } style="height: 100px" name="instructions" required>
 										@{
 											index2 = 0;
-											@foreach (var instruction in recipe.Instructions)
-											{
-												x = index2 > 0 ? "\r\n" : "";
-												x += instruction;
-												@x
-												index2++;
-											}
-										}
-																																																																																																</textarea>
+											if (Model.Open == "edit")
+												@Model.Instructions
+											else
+												@foreach (var instruction in recipe.Instructions)
+												{
+													x = index2 > 0 ? "\r\n" : "";
+													x += instruction;
+													@x
+													index2++;
+												}
+										}																																																																																			</textarea>
 									<label for=@{
 								   x="floatingTextarea2";
 								   x+=recipe.ID;
@@ -250,7 +255,7 @@
 								</div>
 								<div class="form-floating mb-3">
 									<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
-										@foreach (var category in Model.Categories)
+										@foreach (var category in Model.CategoriesList)
 										{
 											x = "";
 											<input name="categories"
@@ -263,17 +268,7 @@
 									   }
 									   value=@category.ID
 									   autocomplete="off"
-									   @{
-									   	@if(recipe.Categories.Any(c=> c== category.ID))
-									   {
-									   x="checked";
-									   }
-									   else
-									   {
-									   x="";
-									   }
-									   	@x
-									   }>
+									   @(Model.Open=="edit"?(Model.Categories.Any(c=> c== category.ID) ?"checked":""):(recipe.Categories.Any(c=> c== category.ID) ?"checked":""))>
 											<label class="btn btn-outline-danger"
 									   for=@{
 									   x="btncheckedit";
@@ -303,7 +298,7 @@
 		 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
-						<form method="post" asp-page="DeleteRecipe">
+						<form method="post" asp-page-handler="DeleteRecipe">
 							<input type="hidden" class="form-control" name="id" value="@recipe.ID">
 							<div class="modal-header">
 								<h5 class="modal-title">Deleting a Recipe</h5>
@@ -336,7 +331,7 @@
 					;
 					} id="@{
 					x="#addButton";
-										@x
+																			@x
 					;
 					}">
 				<img class="action" src="~/Images/add.png" alt="add" />
@@ -356,11 +351,8 @@
 						</div>
 						<div class="buttons">
 							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target=@{
-							x="#showModal";
-							x+=recipe.ID;
-								@x
-							}>
+							<button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+							data-bs-target=@("#showModal"+recipe.ID)>
 								<img class="action" src="~/Images/view.png" alt="view" />
 							</button>
 							<!-- Button trigger modal -->
@@ -369,7 +361,7 @@
 							x+=recipe.ID;
 								@x
 							} id=@{
-							x="#editButton";
+							x="editButton";
 							x+=recipe.ID;
 								@x
 							}>
@@ -382,7 +374,8 @@
 							x="#deleteModal";
 							x+=recipe.ID;
 								@x
-							}>
+							}
+							id=@("deleteButton"+recipe.ID)>
 								<img class="action" src="~/Images/bin.png" alt="del" />
 							</button>
 						</div>
@@ -430,16 +423,16 @@
 		swal.fire({ title: "Success", text: `@Model.Msg`, "icon": "success" });
 	if (`@Model.ReqResult` == "failure")
 		swal.fire({ title: "Failed", text: `@Model.Msg`, "icon": "error" });
-	if (`@Model.Open` == "add" && `@Model.ID` == ``) {
+	if (`@Model.Open` == "add" && `@(Model.ID!=new Guid())`) {
 		var el = document.getElementById("#addButton");
 		setTimeout(() => { el.click(); }, 10);
 	}
-	if (`@Model.Open` == "edit" && `@Model.ID` != ``) {
-		var el = document.getElementById('@{
-		x = "#editButton";
-		x += Model.ID;
-		@x
-	}');
-										setTimeout(() => { el.click(); }, 10);
+	if (`@(Model.ID!=new Guid())` && `@Model.Open` == "edit") {
+		var el = document.getElementById(`@("editButton"+ Model.ID)`);
+		setTimeout(() => { el.click(); }, 10);
+	}
+	if (`@(Model.ID!=new Guid())` && `@Model.Open` == "delete") {
+		var el = document.getElementById(`@("deleteButton"+ Model.ID)`);
+		setTimeout(() => { el.click(); }, 10);
 	}
 </script>
