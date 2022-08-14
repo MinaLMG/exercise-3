@@ -29,57 +29,28 @@
 							<td>@category.Name</td>
 							<td class="flex">
 								<!-- Button trigger modal -->
-								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
-								x="#editModal";
-								x+=category.ID;
-									@x
-								}
-								id=@{
-								x="#editButton";
-								x+=category.ID;
-									@x
-								}>
+								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@("#editModal"+category.ID)
+								id=@("#editButton"+category.ID)>
 									<img class="action" src="~/Images/edit.png" alt="edit"></img>
 								</button>
 
 								<!-- Modal -->
-								<div class="modal fade" id=@{
-							 x="editModal";
-							 x+=category.ID;
-							 	@x
-							 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal fade" id=@("editModal"+category.ID) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
 										<div class="modal-content">
 											<form method="post" asp-page-handler="UpdateCategory" class="needs-validation" novalidate>
 												@*<form method="post" asp-page="/UpdateCategory/@category.ID">*@
 												<div class="modal-header">
-													<h5 class="modal-title" id=@{
-												x="exampleModalLabel";
-												x+=category.ID;
-													@x
-												}>
+													<h5 class="modal-title">
+														@*id=@("exampleModalLabel"+category.ID)>*@
 														Editing a Category
 													</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<div class="modal-body edit">
-													<label for=@{
-												   x="name";
-												   x+=category.ID;
-												   	@x
-												   }
-												   class="form-label">Name</label>
-													<input type="text" class="form-control" id=@{
-												   x="name";
-												   x+=category.ID;
-												   	@x
-												   } name="name" value=@{
-												   x = category.Name;
-												   if(Model.ID!=new Guid() && Model.ID==category.ID && !string.IsNullOrEmpty(@Model.Name))
-												   x=Model.Name;
-												   	@x
-												   }
-												   required>
+													<label for=@("name"+category.ID) class="form-label">Name</label>
+													<input type="text" class="form-control" id=@("name"+category.ID) name="name"
+												   value=@(Model.ID!=new Guid() && Model.ID==category.ID && Model.Open=="edit"?Model.Name:category.Name) required>
 													<input type="hidden" class="form-control" name="id" value="@category.ID" required>
 												</div>
 												<div class="modal-footer">
@@ -92,33 +63,20 @@
 									</div>
 								</div>
 								<!-- Button trigger modal -->
-								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target=@{
-								x="#deleteModal";
-								x+=category.ID;
-									@x
-								}
-								id=@("deleteButton"+category.ID)
-								>
+								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target=@("#deleteModal"+category.ID)
+								id=@("deleteButton"+category.ID)>
 									<img class="action" src="~/Images/bin.png" alt="delete"></img>
 								</button>
 
 								<!-- Modal -->
-								<div class="modal fade" id=@{
-							 x="deleteModal";
-							 x+=category.ID;
-							 	@x
-							 ;
-							 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal fade" id=@("deleteModal"+category.ID)
+							 tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
 										<div class="modal-content">
 											<form method="post" asp-page-handler="DeleteCategory" class="needs-validation" novalidate>
 												<input type="hidden" class="form-control" name="id" value="@category.ID">
 												<div class="modal-header">
-													<h5 class="modal-title" id=@{
-												x="exampleModalLabel";
-												x+=category.ID;
-													@x
-												}>
+													<h5 class="modal-title">
 														Deleting a Category
 													</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -151,12 +109,7 @@
 		<form method="post" asp-page-handler="AddCategory" class="needs-validation" novalidate>
 			<div class="mb-3">
 				<label for="name" class="form-label white">Name</label>
-				<input type="text" class="form-control" id="name" name="name" value="@{
-					   x = "";
-					   if(Model.ID==new Guid() && !string.IsNullOrEmpty(@Model.Name))
-					   x=Model.Name;
-																														   	@x
-					   }" required>
+				<input type="text" class="form-control" id="name" name="name" required value=@((Model.ID==new Guid() && !string.IsNullOrEmpty(@Model.Name))? Model.Name:"")>
 			</div>
 			<button type="submit" class="btn btn-primary" onclick="return validateAddData();">Add Category</button>
 		</form>

@@ -143,7 +143,14 @@ namespace exercise_3_frontend.Pages
             if ((int)res.StatusCode == 200)
                 return Redirect("/recipes?ReqResult=success&Msg=the recipe has been deleted successfully");
             else
-                return RedirectToPage("/recipes", new { ReqResult = "failure", Msg = "something went wrong with your request .. you can retry after some seconds", open = "delete",id = ID,});
+                return RedirectToPage("/recipes",
+                    new
+                    {
+                        ReqResult = "failure",
+                        Msg = "something went wrong with your request .. you can retry after some seconds",
+                        open = "delete",
+                        id = ID,
+                    });
         }
     }
 }

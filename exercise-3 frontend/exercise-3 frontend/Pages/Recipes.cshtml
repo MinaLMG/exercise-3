@@ -8,11 +8,7 @@
 }
 <div class="modals">
 	<!-- Adding Modal -->
-	<div class="modal fade" id=@{
-		 x="addModal";
-		 	@x
-		 ;
-		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id=@("addModal") tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form method="post" asp-page-handler="CreateRecipe" class="needs-validation" novalidate>
@@ -21,65 +17,35 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body ">
-						<label for=@{
-							   x="name";
-							   	@x
-							   ;
-							   } class="form-label ">Title</label>
-						<input type="text" class="form-control mb-3" id="title" name="title" required value=@{
-							   x="";
-							   if(Model.Title!="" && Model.ID==new Guid()){
-							   x=Model.Title;
-							   }
-							   	@x
-							   }>
+						<label for=@("name") class="form-label ">Title</label>
+						<input type="text" class="form-control mb-3" id="title" name="title" required value=@((Model.Title!="" && Model.ID==new Guid())?Model.Title:"")>
 						<div class="valid-feedback">
 							Looks good!
 						</div>
 						<input type="hidden" class="form-control" name="id">
 						<div class="form-floating mb-3">
-							<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@{
-									  x="floatingTextarea";
-									  	@x
-									  ;
-									  } style="height: 100px" name="ingredients" required>@{
-									x = "";
-									if (Model.Ingredients != "" && Model.ID == new Guid())
-									{
-										x = Model.Ingredients;
-									}
-									@x
-								}</textarea>
+							<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@("floatingTextarea")
+									  style="height: 100px" name="ingredients" required>
+								@((Model.Ingredients != "" && Model.ID == new Guid())?Model.Ingredients:"")
+								</textarea>
 							<div class="valid-feedback">
 								Looks good!
 							</div>
-							<label for=@{
-								   x="floatingTextarea";
-								   	@x
-								   ;
-								   }>ingredients<span class="weaker">(separated by new lines)</span></label>
+							<label for=@("floatingTextarea")>
+								ingredients<span class="weaker">(separated by new lines)</span>
+							</label>
 						</div>
 						<div class="form-floating mb-3">
-							<textarea class="form-control" placeholder="Leave a comment here" id=@{
-									  x="floatingTextarea2";
-									  	@x
-									  ;
-									  } style="height: 100px" name="instructions" required>@{
-									x = "";
-									if (Model.Instructions != "" && Model.ID == new Guid())
-									{
-										x = Model.Instructions;
-									}
-									@x
-								}</textarea>
+							<textarea class="form-control" placeholder="Leave a comment here" id=@("floatingTextarea2")
+									  style="height: 100px" name="instructions" required>
+								@((Model.Instructions != "" && Model.ID == new Guid())?Model.Instructions :"")
+								</textarea>
 							<div class="valid-feedback">
 								Looks good!
 							</div>
-							<label for=@{
-								   x="floatingTextarea2";
-								   	@x
-								   ;
-								   }>instructions<span class="weaker">(separated by new lines)</span></label>
+							<label for=@("floatingTextarea2")>
+								instructions<span class="weaker">(separated by new lines)</span>
+							</label>
 						</div>
 						<div class="form-floating mb-3">
 							<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
@@ -87,21 +53,12 @@
 								{
 									x = "";
 									<input name="categories"
-									   type="checkbox" class="btn-check" id=@{
-									   x = "btncheckedit";
-									   x+=category.ID;
-									   	@x
-									   }
+									   type="checkbox" class="btn-check" id=@("btncheckedit"+category.ID)
 									   value=@category.ID
 									   autocomplete="off"
 									   @(Model.Open=="add"?(Model.Categories.Any(c=> c== category.ID) ?"checked":""):"")>
 									<label class="btn btn-outline-danger"
-									   for=@{
-									   x="btncheckedit";
-									   x+=category.ID;
-									   	@x
-									   ;
-									   }>
+									   for=@("btncheckedit"+category.ID)>
 										@category.Name
 									</label>
 								}
@@ -121,12 +78,7 @@
 		@foreach (var recipe in Model.Recipes)
 		{
 			<!--showing Modal -->
-			<div class="modal fade" id=@{
-		 x="showModal";
-		 x+=recipe.ID;
-		 	@x
-		 ;
-		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal fade" id=@("showModal"+recipe.ID) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -168,12 +120,7 @@
 				</div>
 			</div>
 			<!-- Editing Modal -->
-			<div class="modal fade" id=@{
-		 x="editModal";
-		 x+=recipe.ID;
-		 	@x
-		 ;
-		 } +@category.ID tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal fade" id=@("editModal"+recipe.ID) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<form method="post" asp-page-handler="UpdateRecipe" class="needs-validation" novalidate>
@@ -182,26 +129,13 @@
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body edit">
-								<label for=@{
-							   x="name";
-							   x+=recipe.ID;
-							   	@x
-							   ;
-							   } class="form-label ">Title</label>
-								<input type="text" class="form-control mb-3" id=@{
-							   x="title";
-							   x+=recipe.ID;
-							   	@x
-							   ;
-							   } name="title" value="@(Model.Open=="edit"?Model.Title:recipe.Title)" required>
+								<label for=@("name"+recipe.ID) class="form-label ">Title</label>
+								<input type="text" class="form-control mb-3" id=@("title"+recipe.ID) name="title"
+							   value="@(Model.Open=="edit"?Model.Title:recipe.Title)" required>
 								<input type="hidden" class="form-control" name="id" value="@recipe.ID">
 								<div class="form-floating mb-3">
-									<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@{
-									  x="floatingTextarea";
-									  x+=recipe.ID;
-									  	@x
-									  ;
-									  } style="height: 100px" name="ingredients" required>
+									<textarea class="form-control mb-3" placeholder="Leave a comment here" id=@("floatingTextarea"+recipe.ID)
+									  style="height: 100px" name="ingredients" required>
 										@{
 											var index2 = 0;
 											if (Model.Open == "edit")
@@ -218,21 +152,13 @@
 
 											}
 										}
-																																																																																																																</textarea>
-									<label for=@{
-								   x="floatingTextarea";
-								   x+=recipe.ID;
-								   	@x
-								   ;
-								   }>ingredients<span class="weaker">(separated by new lines)</span></label>
+																																																																																																																																																																																</textarea>
+									<label for=@("floatingTextarea"+recipe.ID)>
+										ingredients<span class="weaker">(separated by new lines)</span>
+									</label>
 								</div>
 								<div class="form-floating mb-3">
-									<textarea class="form-control" placeholder="Leave a comment here" id=@{
-									  x="floatingTextarea2";
-									  x+=recipe.ID;
-									  	@x
-									  ;
-									  } style="height: 100px" name="instructions" required>
+									<textarea class="form-control" placeholder="Leave a comment here" id=@("floatingTextarea2"+recipe.ID) style="height: 100px" name="instructions" required>
 										@{
 											index2 = 0;
 											if (Model.Open == "edit")
@@ -246,12 +172,9 @@
 													index2++;
 												}
 										}																																																																																			</textarea>
-									<label for=@{
-								   x="floatingTextarea2";
-								   x+=recipe.ID;
-								   	@x
-								   ;
-								   }>instructions<span class="weaker">(separated by new lines)</span></label>
+									<label for=@("floatingTextarea2"+recipe.ID)>
+										instructions<span class="weaker">(separated by new lines)</span>
+									</label>
 								</div>
 								<div class="form-floating mb-3">
 									<div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
@@ -259,23 +182,12 @@
 										{
 											x = "";
 											<input name="categories"
-									   type="checkbox" class="btn-check" id=@{
-									   x = "btncheckedit";
-									   x+=recipe.ID;
-									   x+=category.ID;
-									   	@x
-									   ;
-									   }
+									   type="checkbox" class="btn-check" id=@("btncheckedit"+recipe.ID+category.ID)
 									   value=@category.ID
 									   autocomplete="off"
 									   @(Model.Open=="edit"?(Model.Categories.Any(c=> c== category.ID) ?"checked":""):(recipe.Categories.Any(c=> c== category.ID) ?"checked":""))>
 											<label class="btn btn-outline-danger"
-									   for=@{
-									   x="btncheckedit";
-									   x+=recipe.ID;
-									   x+=category.ID;
-									   	@x
-									   }>
+									   for=@("btncheckedit"+recipe.ID+category.ID)>
 												@category.Name
 											</label>
 										}
@@ -291,11 +203,8 @@
 				</div>
 			</div>
 			<!--Delete Modal -->
-			<div class="modal fade" id=@{
-		 x="deleteModal";
-		 x+=recipe.ID;
-		 	@x
-		 } tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal fade" id=@("deleteModal"+recipe.ID)
+		 tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<form method="post" asp-page-handler="DeleteRecipe">
@@ -325,17 +234,8 @@
 		<div class="recipes-header-container">
 			<h1> Recipes </h1>
 			<!-- Button trigger modal -->
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
-					x="#addModal";
-						@x
-					;
-					} id="@{
-					x="#addButton";
-																			@x
-					;
-					}">
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@("#addModal") id=@("#addButton")>
 				<img class="action" src="~/Images/add.png" alt="add" />
-
 			</button>
 
 		</div>
@@ -356,26 +256,16 @@
 								<img class="action" src="~/Images/view.png" alt="view" />
 							</button>
 							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@{
-							x="#editModal";
-							x+=recipe.ID;
-								@x
-							} id=@{
-							x="editButton";
-							x+=recipe.ID;
-								@x
-							}>
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=@("#editModal"+recipe.ID)
+							id=@("editButton"+recipe.ID){
+							x="editButton">
 								<img class="action" src="~/Images/edit.png" alt="edit" />
 							</button>
 
 
 							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target=@{
-							x="#deleteModal";
-							x+=recipe.ID;
-								@x
-							}
-							id=@("deleteButton"+recipe.ID)>
+							<button type="button" class="btn btn-danger" data-bs-toggle="modal"
+							data-bs-target=@("deleteModal"+recipe.ID) id=@("deleteButton"+recipe.ID)>
 								<img class="action" src="~/Images/bin.png" alt="del" />
 							</button>
 						</div>
