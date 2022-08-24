@@ -5,8 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7146/",
+                                "https://minalmg-2.azurewebsites.net").AllowAnyHeader()
+                                                .AllowAnyMethod()
+                                                .AllowAnyOrigin(); ;
+        });
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -15,6 +27,8 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = String.Empty;
 });
+app.UseCors();
+
 Data data = new Data(app);
 Pages pages = new Pages(data);
 pages.CategoryPages(app);
